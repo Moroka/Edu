@@ -1,6 +1,5 @@
 package edu;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MergeSort {
@@ -28,36 +27,39 @@ public class MergeSort {
     private static int[] merge(int[] leftArray, int[] rightArray) {
         System.out.print("Merge: " + Arrays.toString(leftArray) + " + " + Arrays.toString(rightArray) + " -> ");
 
-        ArrayList<Integer> sortedArray = new ArrayList<>();
+
+        int [] sortedArray = new int[leftArray.length + rightArray.length];
+
         int leftArrayIndex = 0;
         int rightArrayIndex = 0;
+        int i = -1;
+
 
         while ((leftArrayIndex < leftArray.length) && (rightArrayIndex < rightArray.length)) {
+            i++;
             if (leftArray[leftArrayIndex] < rightArray[rightArrayIndex]) {
-                sortedArray.add(leftArray[leftArrayIndex]);
+                sortedArray[i] = leftArray[leftArrayIndex];
                 leftArrayIndex++;
             } else {
-                sortedArray.add(rightArray[rightArrayIndex]);
+                sortedArray[i] = rightArray[rightArrayIndex];
                 rightArrayIndex++;
             }
         }
 
         // Ugly hack, no ideas how do it better
         while (leftArrayIndex < leftArray.length) {
-            sortedArray.add(leftArray[leftArrayIndex]);
+            i++;
+            sortedArray[i] = leftArray[leftArrayIndex];
             leftArrayIndex++;
         }
         while (rightArrayIndex < rightArray.length) {
-            sortedArray.add(rightArray[rightArrayIndex]);
+            i++;
+            sortedArray[i] = rightArray[rightArrayIndex];
             rightArrayIndex++;
         }
 
-        System.out.println(sortedArray);
+        System.out.println(Arrays.toString(sortedArray));
 
-        int[] arrayForConversion = new int[sortedArray.size()];
-        for (int i =0; i < sortedArray.size(); i++)
-            arrayForConversion[i] = sortedArray.get(i);
-
-        return arrayForConversion;
+        return sortedArray;
     }
 }
