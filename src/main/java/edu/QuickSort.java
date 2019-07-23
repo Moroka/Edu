@@ -11,7 +11,7 @@ public class QuickSort {
     private static void doQuickSort(int[] arr, int low, int high) {
         if (low >= high) return;
 
-        int p = partition(arr, low, high);
+        final int p = partition(arr, low, high);
         System.out.println("Partition is: " + p);
 
         doQuickSort(arr, low, p);
@@ -23,7 +23,7 @@ public class QuickSort {
         System.out.println("New partition. Index range: " + low + " - " +  high);
         printRangeOfArray(arr, low, high);
 
-        int pivot = arr[(low + high) / 2];
+        final int pivot = arr[(low + high) / 2];
         System.out.println("Pivot: " + pivot);
 
         int i = low - 1;

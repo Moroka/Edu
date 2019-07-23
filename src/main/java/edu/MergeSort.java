@@ -11,7 +11,7 @@ public class MergeSort {
             return arr;
         }
 
-        int middle = arr.length / 2;
+        final int middle = arr.length / 2;
 
         int[] leftPartArray = Arrays.copyOfRange(arr, 0, middle);
         int[] rightPartArray = Arrays.copyOfRange(arr, middle, arr.length);
