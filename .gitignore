@@ -1,12 +1,3 @@
-/.idea/*.xml
-/.idea/copyright/*.xml
-/.idea/*.html
-/*.iml
-/.gradle/2.13/taskArtifacts/*.properties
-/.gradle/2.13/taskArtifacts/*.lock
-/.gradle/2.13/taskArtifacts/*.bin
-/.idea/*.name
-/.idea/libraries/*.xml
-/.idea/modules/*.iml
-/build/classes/main/Edu/*.class
-/build/classes/test/Edu/*.class
+/.idea/*
+/.gradle/
+/build/
