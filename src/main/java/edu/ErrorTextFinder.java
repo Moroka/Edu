@@ -26,8 +26,6 @@ public class ErrorTextFinder {
             boolean isTailAfterExtraCharOk;
             for (int i = 0; i < sourceText.length() - 1; i++) {
                 if (sourceText.charAt(i) != comparedText.charAt(i)) {
-                    // After finding first mismatch -
-                    System.out.println(sourceText.charAt(i) + " - " + comparedText.charAt(i));
                     // missing char
                     if ((i + 1 <= sourceText.length() - 1)) {
                         isTailAfterMissingCharOk = isStringsEqual(sourceText.substring(i + 1), comparedText.substring(i));
@@ -48,7 +46,6 @@ public class ErrorTextFinder {
     }
 
     private static boolean isStringsEqual(String s1, String s2) {
-        System.out.println(s1 + " - " + s2);
         return s1.equals(s2);
     }
 }
