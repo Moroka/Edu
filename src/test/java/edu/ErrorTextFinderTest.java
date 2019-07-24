@@ -18,6 +18,7 @@ public class ErrorTextFinderTest {
     @Test
     public void wrongOneCharTest() {
         assertFalse(ErrorTextFinder.isTextContainErrors("github", "gethub"));
+        assertFalse(ErrorTextFinder.isTextContainErrors("github", "githud"));
     }
 
     @Test
@@ -29,11 +30,13 @@ public class ErrorTextFinderTest {
     public void missingCharTest() {
         assertFalse(ErrorTextFinder.isTextContainErrors("github", "gthub"));
         assertFalse(ErrorTextFinder.isTextContainErrors("github", "githu"));
+        assertFalse(ErrorTextFinder.isTextContainErrors("githu", "github"));
     }
 
     @Test
     public void missingCharAndWrongCharTest() {
         assertTrue(ErrorTextFinder.isTextContainErrors("github", "githo"));
+        assertTrue(ErrorTextFinder.isTextContainErrors("github", "gehub"));
     }
 
     @Test
