@@ -5,48 +5,61 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ErrorTextFinderTest {
-    @Test
-    public void differentTextsLengthTest() {
-        assertTrue(ErrorTextFinder.isTextContainErrors("github", "gggithub"));
-    }
-
-    @Test
-    public void equalTextsTest() {
-        assertFalse(ErrorTextFinder.isTextContainErrors("github", "github"));
-    }
-
-    @Test
-    public void wrongOneCharTest() {
-        assertFalse(ErrorTextFinder.isTextContainErrors("github", "gethub"));
-        assertFalse(ErrorTextFinder.isTextContainErrors("github", "githud"));
-    }
-
+    // Text contains more than two errors
     @Test
     public void wrongTwoCharsTest() {
-        assertTrue(ErrorTextFinder.isTextContainErrors("github", "gethob"));
+        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gethob"));
     }
 
     @Test
-    public void missingCharTest() {
-        assertFalse(ErrorTextFinder.isTextContainErrors("github", "gthub"));
-        assertFalse(ErrorTextFinder.isTextContainErrors("github", "githu"));
-        assertFalse(ErrorTextFinder.isTextContainErrors("githu", "github"));
+    public void twoExtraLettersTest() {
+        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gggithub"));
     }
 
     @Test
-    public void missingCharAndWrongCharTest() {
-        assertTrue(ErrorTextFinder.isTextContainErrors("github", "githo"));
-        assertTrue(ErrorTextFinder.isTextContainErrors("github", "gehub"));
-    }
-
-    @Test
-    public void extraCharTest() {
-        assertFalse(ErrorTextFinder.isTextContainErrors("github", "gitthub"));
-        assertFalse(ErrorTextFinder.isTextContainErrors("github", " github"));
+    public void twoMissingLettersTest() {
+        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gith"));
     }
 
     @Test
     public void extraCharAndWrongCharTest() {
-        assertTrue(ErrorTextFinder.isTextContainErrors("github", "getthub"));
+        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "getthub"));
+    }
+
+    @Test
+    public void missingCharAndWrongCharTest() {
+        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "githo"));
+        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gehub"));
+    }
+
+    @Test
+    public void missingCharAndExtraCharTest() {
+        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "ggithu"));
+    }
+
+    // Text contains one error
+    @Test
+    public void extraCharTest() {
+        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gitthub"));
+        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", " github"));
+    }
+
+    @Test
+    public void wrongCharTest() {
+        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gethub"));
+        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "githud"));
+    }
+
+    @Test
+    public void missingCharTest() {
+        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gthub"));
+        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "githu"));
+        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("githu", "github"));
+    }
+
+    // Text doesn't contains any errors
+    @Test
+    public void equalTextsTest() {
+        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "github"));
     }
 }
