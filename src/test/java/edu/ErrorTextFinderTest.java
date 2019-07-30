@@ -5,61 +5,63 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ErrorTextFinderTest {
-    // Text contains more than two errors
+    // Text contains more than two typos
     @Test
     public void wrongTwoCharsTest() {
-        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gethob"));
+        assertFalse(ErrorTextFinder.hasMaxOneTypo("github", "gethob"));
     }
 
     @Test
-    public void twoExtraLettersTest() {
-        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gggithub"));
+    public void twoExtraCharsTest() {
+        assertFalse(ErrorTextFinder.hasMaxOneTypo("github", "gggithub"));
     }
 
     @Test
-    public void twoMissingLettersTest() {
-        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gith"));
+    public void twoMissingCharsTest() {
+        assertFalse(ErrorTextFinder.hasMaxOneTypo("github", "gith"));
     }
 
     @Test
     public void extraCharAndWrongCharTest() {
-        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "getthub"));
+        assertFalse(ErrorTextFinder.hasMaxOneTypo("g", "tt"));
+        assertFalse(ErrorTextFinder.hasMaxOneTypo("tt", "g"));
+        assertFalse(ErrorTextFinder.hasMaxOneTypo("github", "getthub"));
     }
 
     @Test
     public void missingCharAndWrongCharTest() {
-        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "githo"));
-        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gehub"));
+        assertFalse(ErrorTextFinder.hasMaxOneTypo("github", "githo"));
+        assertFalse(ErrorTextFinder.hasMaxOneTypo("github", "gehub"));
     }
 
     @Test
     public void missingCharAndExtraCharTest() {
-        assertTrue(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "ggithu"));
+        assertFalse(ErrorTextFinder.hasMaxOneTypo("github", "ggithu"));
     }
 
-    // Text contains one error
+    // Text contains one typo
     @Test
     public void extraCharTest() {
-        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gitthub"));
-        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", " github"));
+        assertTrue(ErrorTextFinder.hasMaxOneTypo("github", "gitthub"));
+        assertTrue(ErrorTextFinder.hasMaxOneTypo("github", " github"));
     }
 
     @Test
     public void wrongCharTest() {
-        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gethub"));
-        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "githud"));
+        assertTrue(ErrorTextFinder.hasMaxOneTypo("github", "gethub"));
+        assertTrue(ErrorTextFinder.hasMaxOneTypo("github", "githud"));
     }
 
     @Test
     public void missingCharTest() {
-        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "gthub"));
-        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "githu"));
-        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("githu", "github"));
+        assertTrue(ErrorTextFinder.hasMaxOneTypo("github", "gthub"));
+        assertTrue(ErrorTextFinder.hasMaxOneTypo("github", "githu"));
+        assertTrue(ErrorTextFinder.hasMaxOneTypo("githu", "github"));
     }
 
-    // Text doesn't contains any errors
+    // Text doesn't contains any typos
     @Test
     public void equalTextsTest() {
-        assertFalse(ErrorTextFinder.isTextContainsMoreThanTwoErrors("github", "github"));
+        assertTrue(ErrorTextFinder.hasMaxOneTypo("github", "github"));
     }
 }
