@@ -16,8 +16,7 @@ public class TypoTextFinder {
         final int typoIndex = firstTypoIndex(s1, s2);
         if (typoIndex < 0)
             return true;
-        else
-           return tailsEqual(s1, typoIndex + 1, s2, typoIndex + 1);
+        return tailsEqual(s1, typoIndex + 1, s2, typoIndex + 1);
     }
 
     private static boolean checkFirstLonger(String s1, String s2) {
@@ -26,8 +25,7 @@ public class TypoTextFinder {
         final int typoIndex = firstTypoIndex(s1, s2);
         if (typoIndex < 0)
             return true;
-        else
-            return tailsEqual(s1, typoIndex + 1, s2, typoIndex);
+        return tailsEqual(s1, typoIndex + 1, s2, typoIndex);
     }
 
     private static int firstTypoIndex(String s1, String s2) {
