@@ -23,6 +23,7 @@ public class TypoTextFinderTest {
 
     @Test
     public void extraCharAndWrongCharTest() {
+        assertFalse(TypoTextFinder.hasMaxOneTypo("", "b"));
         assertFalse(TypoTextFinder.hasMaxOneTypo("g", "tt"));
         assertFalse(TypoTextFinder.hasMaxOneTypo("tt", "g"));
         assertFalse(TypoTextFinder.hasMaxOneTypo("github", "getthub"));
