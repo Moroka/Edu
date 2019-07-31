@@ -13,23 +13,26 @@ public class TypoTextFinder {
     }
 
     private static boolean checkEqualLengths(String s1, String s2) {
-        for (int i = 0; i < s1.length() - 1; i++) {
-            if (s1.charAt(i) != s2.charAt(i)) {
-                if (i + 1 <= s1.length() - 1)
-                    return tailsEqual(s1, i + 1, s2, i + 1);
-            }
-        }
-        return true;
+        int typoIndex = firstTypoIndex(s1, s2);
+        if (typoIndex > -1)
+            return tailsEqual(s1, typoIndex + 1, s2, typoIndex + 1);
+        else
+           return true;
     }
 
     private static boolean checkFirstLonger(String s1, String s2) {
+        int typoIndex = firstTypoIndex(s1, s2);
+        return (tailsEqual(s1, typoIndex + 1, s2, typoIndex));
+    }
+
+    private static int firstTypoIndex(String s1, String s2) {
         for (int i = 0; i < s1.length(); i++) {
+            if (s1.length() != s2.length() && i == s2.length())
+                return i;
             if (s1.charAt(i) != s2.charAt(i))
-                return (tailsEqual(s1, i + 1, s2, i));
-            if (i == s2.length() - 1)
-                return true;
+                return i;
         }
-        return true;
+        return -1;
     }
 
     private static boolean tailsEqual(String s1, int sliceInd1, String s2, int sliceInd2) {
