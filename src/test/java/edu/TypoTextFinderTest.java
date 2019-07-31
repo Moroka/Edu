@@ -57,7 +57,6 @@ public class TypoTextFinderTest {
     public void missingCharTest() {
         assertTrue(TypoTextFinder.hasMaxOneTypo("github", "gthub"));
         assertTrue(TypoTextFinder.hasMaxOneTypo("github", "githu"));
-        assertTrue(TypoTextFinder.hasMaxOneTypo("githu", "github"));
     }
 
     // Text doesn't contains any typos
