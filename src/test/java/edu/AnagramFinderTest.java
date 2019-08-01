@@ -6,27 +6,42 @@ import static org.junit.Assert.*;
 
 public class AnagramFinderTest {
     @Test
-    public void anagramFinderTest1() {
-        assertEquals(-1, AnagramFinder.getAnagramIndexAtText("rest", "simple test"));
+    public void anagramAtBeginningOfText() {
+        assertEquals(0, AnagramFinder.getAnagramIndexAtText("ttes", "testsimple"));
     }
 
     @Test
-    public void anagramFinderTest2() {
-        assertEquals(1, AnagramFinder.getAnagramIndexAtText("rat", "part"));
+    public void anagramAtEndingOfText() {
+        assertEquals(6, AnagramFinder.getAnagramIndexAtText("ttes", "simpletest"));
     }
 
     @Test
-    public void anagramFinderTest3() {
-        assertEquals(8, AnagramFinder.getAnagramIndexAtText("test", "tesqqqtestqqqq"));
+    public void anagramAtMiddleOfText() {
+        assertEquals(3, AnagramFinder.getAnagramIndexAtText("ttes", "simtestple"));
     }
 
     @Test
-    public void anagramFinderTest4() {
-        assertEquals(8, AnagramFinder.getAnagramIndexAtText("yaes", "It's so easy with github"));
+    public void anagramIsText() {
+        assertEquals(0, AnagramFinder.getAnagramIndexAtText("bcd", "dcb"));
     }
 
     @Test
-    public void anagramFinderTest5() {
-        assertEquals(-1, AnagramFinder.getAnagramIndexAtText("ttse", "simple trest"));
+    public void anagramIsEqualToText() {
+        assertEquals(0, AnagramFinder.getAnagramIndexAtText("bcd", "bcd"));
+    }
+
+    @Test
+    public void anagramFalsePositive() {
+        assertEquals(6, AnagramFinder.getAnagramIndexAtText("abc", "abdacdabc"));
+    }
+
+    @Test
+    public void anagramAtEmptyText() {
+        assertEquals(-1, AnagramFinder.getAnagramIndexAtText("fail", ""));
+    }
+
+    @Test
+    public void emptyAnagramAtText() {
+        assertEquals(-1, AnagramFinder.getAnagramIndexAtText("", "fail"));
     }
 }

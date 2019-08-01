@@ -4,86 +4,34 @@ import java.util.HashMap;
 
 public class AnagramFinder {
     public static int getAnagramIndexAtText(String anagramText, String text) {
-        System.out.println("Find anagram: '" + anagramText + "' at text: '" + text + "'");
+        if (anagramText.length() > text.length() || anagramText.length() == 0)
+            return -1;
 
-        HashMap<Character, Integer> anagram = getAnagram(anagramText);
+        System.out.printf("Find anagram: '%s' at text: %s%n", anagramText, text);
 
-        System.out.println("Anagram hashMap is: " + anagram);
-        System.out.println();
+        HashMap<Character, Integer> anagram = getHashMap(anagramText);
+        System.out.printf("Anagram hash map is: %s Hash code is: %d%n", anagram, anagram.hashCode());
 
-        int originalSize = anagram.size();
-        boolean reverseMode = false;
-        int matchesCount = 0;
-
-        for (int i = 0; i < text.length(); i++) {
-             if (i > text.length() - anagram.size()) return -1;
-
-             if (reverseMode) {
-                 matchesCount = matchesCount - 1;
-                 addCharToHashMap(anagram, text.charAt(i));
-                 if (matchesCount == 0) {
-                     reverseMode = false;
-                     i = i+ 1;
-                 }
-
-             }
-
-             if (anagram.containsKey(text.charAt(i)) && !reverseMode) {
-                 System.out.println("Find anagram symbol '" + text.charAt(i) + "' at index: " + (i));
-                 removeCharAtHashMap(anagram, text.charAt(i));
-                 matchesCount = matchesCount + 1;
-                 System.out.println("Anagram hashMap after removing symbol is: " + anagram + " Anagram size is: " + anagram.size() + " Matches count: " + matchesCount);
-                 if (anagram.size() == 0) return i - originalSize + 1;
-             else if (matchesCount > 0) {
-                 i = i - matchesCount;
-                 reverseMode = true;
-                 }
-
-//                 for (int j = 1; j < anagramText.length(); j++) {
-//                     if (anagram.containsKey(text.charAt(i + j))) {
-//                         System.out.println("Find anagram symbol '" + text.charAt(i+j) + "' at index: " + (i+j));
-//                         removeCharAtHashMap(anagram, text.charAt(i+j));
-//                         System.out.println("Anagram hashMap after removing symbol is: " + anagram + " Anagram size is: " + anagram.size());
-//
-//                     } else {
-//                         System.out.println("Find non-anagram symbol '" + text.charAt(i+j) + "' at index: " + (i + j));
-//                         anagram = getAnagram(anagramText);
-//                         System.out.println(":: Refreshing anagram... " + anagram);
-//                         break;
-//                     }
-//                 }
+        for (int i = 0; i <= text.length() - anagramText.length(); i++) {
+            String slicedString = text.substring(i, i + anagramText.length());
+            if (anagram.hashCode() == getHashMap(slicedString).hashCode()) {
+                System.out.printf("Equal hash code found at index: %d as '%s'%n", i, slicedString);
+                return i;
             }
         }
 
         return -1;
-
     }
 
-    private static HashMap<Character, Integer> getAnagram(String anagram) {
+    private static HashMap<Character, Integer> getHashMap(String text) {
         HashMap<Character, Integer> hashMap = new HashMap<>();
-        for (int i = 0; i < anagram.length(); i++) {
-            if (hashMap.containsKey(anagram.charAt(i))){
-                hashMap.put(anagram.charAt(i), hashMap.get(anagram.charAt(i)) + 1);
+        for (int i = 0; i < text.length(); i++) {
+            if (hashMap.containsKey(text.charAt(i))){
+                hashMap.put(text.charAt(i), hashMap.get(text.charAt(i)) + 1);
             } else {
-                hashMap.put(anagram.charAt(i), 1);
+                hashMap.put(text.charAt(i), 1);
             }
         }
         return hashMap;
-    }
-
-    private static void removeCharAtHashMap(HashMap<Character, Integer> hashMap, Character c) {
-        if (hashMap.get(c) > 1) {
-            hashMap.put(c, hashMap.get(c) - 1);
-        } else {
-            hashMap.remove(c);
-        }
-    }
-
-    private static void addCharToHashMap(HashMap<Character, Integer> hashMap, Character c) {
-        if (hashMap.containsKey(c)) {
-            hashMap.put(c, hashMap.get(c) + 1);
-        } else {
-            hashMap.put(c, 1);
-        }
     }
 }
