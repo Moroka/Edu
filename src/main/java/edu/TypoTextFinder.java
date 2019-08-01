@@ -21,7 +21,7 @@ public class TypoTextFinder {
 
     private static boolean checkFirstLonger(String s1, String s2) {
         if (s2.length() == 0)
-            return false;
+            return true;
         final int typoIndex = firstTypoIndex(s1, s2);
         if (typoIndex < 0)
             return true;

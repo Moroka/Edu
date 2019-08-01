@@ -23,7 +23,6 @@ public class TypoTextFinderTest {
 
     @Test
     public void extraCharAndWrongCharTest() {
-        assertFalse(TypoTextFinder.hasMaxOneTypo("", "b"));
         assertFalse(TypoTextFinder.hasMaxOneTypo("g", "tt"));
         assertFalse(TypoTextFinder.hasMaxOneTypo("tt", "g"));
         assertFalse(TypoTextFinder.hasMaxOneTypo("github", "getthub"));
@@ -57,6 +56,7 @@ public class TypoTextFinderTest {
     public void missingCharTest() {
         assertTrue(TypoTextFinder.hasMaxOneTypo("github", "gthub"));
         assertTrue(TypoTextFinder.hasMaxOneTypo("github", "githu"));
+        assertTrue(TypoTextFinder.hasMaxOneTypo("", "b"));
     }
 
     // Text doesn't contains any typos
