@@ -14,7 +14,7 @@ public class AnagramFinderFast {
 
         LOGGER.debug("Find anagram: '{}' at text: {}", anagramText, text);
 
-        CharIntHashMap anagram = getHashMap(anagramText);
+        CharIntHashMap anagram = new CharIntHashMap(anagramText);
         LOGGER.debug("Reference anagram hash map is: {}", anagram);
 
         for (int i = 0; i < anagramText.length(); i++) {
@@ -35,18 +35,4 @@ public class AnagramFinderFast {
         return -1;
 
     }
-
-    private static CharIntHashMap getHashMap(String anagram) {
-        CharIntHashMap hashMap = new CharIntHashMap();
-        for (int i = 0; i < anagram.length(); i++) {
-            if (hashMap.containsKey(anagram.charAt(i))){
-                hashMap.put(anagram.charAt(i), hashMap.get(anagram.charAt(i)) + 1);
-            } else {
-                hashMap.put(anagram.charAt(i), 1);
-            }
-        }
-        return hashMap;
-    }
-
-
 }
