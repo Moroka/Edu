@@ -42,6 +42,6 @@ public class AnagramFinderFastTest {
 
     @Test
     public void emptyAnagramAtText() {
-        assertEquals(-1, AnagramFinderFast.getAnagramIndexAtText("", "fail"));
+        assertEquals(0, AnagramFinderFast.getAnagramIndexAtText("", "fail"));
     }
 }

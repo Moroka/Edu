@@ -4,7 +4,9 @@ import java.util.HashMap;
 
 public class AnagramFinderFast {
     public static int getAnagramIndexAtText(String anagramText, String text) {
-        if (anagramText.length() > text.length() || anagramText.length() == 0)
+        if (anagramText.length() == 0)
+            return 0;
+        if (anagramText.length() > text.length())
             return -1;
 
         System.out.printf("Find anagram: '%s' at text: %s%n", anagramText, text);
@@ -16,14 +18,14 @@ public class AnagramFinderFast {
             subtractCharCount(anagram, text.charAt(i));
         }
 
-        if (anagram.size() == 0)
+        if (anagram.isEmpty())
             return 0;
 
         for (int j = 0; j <= text.length() - anagramText.length() - 1; j++) {
             addCharCount(anagram, text.charAt(j));
             subtractCharCount(anagram, text.charAt(j + anagramText.length()));
 
-            if (anagram.size() == 0)
+            if (anagram.isEmpty())
                 return j + 1;
         }
 
