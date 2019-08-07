@@ -1,4 +1,4 @@
-package edu;
+package edu.AnagramFinder;
 
 import java.util.HashMap;
 

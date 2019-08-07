@@ -1,4 +1,4 @@
-package edu;
+package edu.Sorting;
 
 import java.util.Arrays;
 
