@@ -40,11 +40,12 @@ public class CharCounters {
 
         if (value == null) {
             hashMap.put(c, 1);
-        } else {
-            if (value == -1)
-                hashMap.remove(c);
-            else
-                hashMap.put(c, value + 1);
+            return;
         }
+
+        if (value == -1)
+            hashMap.remove(c);
+        else
+            hashMap.put(c, value + 1);
     }
 }
