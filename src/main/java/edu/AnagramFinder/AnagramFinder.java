@@ -1,21 +1,24 @@
 package edu.AnagramFinder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 
 public class AnagramFinder {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnagramFinderFast.class);
+
     public static int getAnagramIndexAtText(String anagramText, String text) {
         if (anagramText.length() > text.length() || anagramText.length() == 0)
             return -1;
 
-        System.out.printf("Find anagram: '%s' at text: %s%n", anagramText, text);
+        LOGGER.debug("Find anagram: '{}' at text: {}", anagramText, text);
 
         HashMap<Character, Integer> anagram = getHashMap(anagramText);
-        System.out.printf("Anagram hash map is: %s Hash code is: %d%n", anagram, anagram.hashCode());
 
         for (int i = 0; i <= text.length() - anagramText.length(); i++) {
             String slicedString = text.substring(i, i + anagramText.length());
             if (anagram.hashCode() == getHashMap(slicedString).hashCode()) {
-                System.out.printf("Equal hash code found at index: %d as '%s'%n", i, slicedString);
                 return i;
             }
         }

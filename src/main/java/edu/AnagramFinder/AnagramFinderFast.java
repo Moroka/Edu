@@ -18,7 +18,6 @@ public class AnagramFinderFast {
 
         CharCounters charCounters = new CharCounters(anagramText);
         HashMap<Character, Integer> anagram = charCounters.getHashMap();
-        LOGGER.debug("Reference anagram hash map is: {}", anagram);
 
         for (int i = 0; i < anagramText.length(); i++) {
             charCounters.subtractCharCount(text.charAt(i));
