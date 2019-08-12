@@ -3,50 +3,47 @@ package edu.AnagramFinder;
 import java.util.HashMap;
 
 public class CharCounters {
-    private HashMap<Character, Integer> hashMap;
-    private String s;
+    private final HashMap<Character, Integer> storage = new HashMap<>();
 
-    public CharCounters(String s) {
-        this.s = s;
+    private CharCounters() {
     }
 
-    public HashMap<Character, Integer> getHashMap() {
-        hashMap = new HashMap<>();
-        for (int i = 0; i < s.length(); i++) {
-            if (hashMap.containsKey(s.charAt(i))) {
-                hashMap.put(s.charAt(i), hashMap.get(s.charAt(i)) + 1);
-            } else {
-                hashMap.put(s.charAt(i), 1);
-            }
-        }
-        return hashMap;
+    public static CharCounters makeFromString(String s) {
+        final CharCounters result = new CharCounters();
+        for (int i = 0; i < s.length(); i++)
+            result.addCharCount(s.charAt(i));
+        return result;
     }
 
     public void subtractCharCount(char c) {
-        Integer value = hashMap.get(c);
+        Integer value = storage.get(c);
 
         if (value == null) {
-            hashMap.put(c, -1);
+            storage.put(c, -1);
             return;
         }
 
         if (value == 1)
-            hashMap.remove(c);
+            storage.remove(c);
         else
-            hashMap.put(c, value - 1);
+            storage.put(c, value - 1);
     }
 
     public void addCharCount(char c) {
-        Integer value = hashMap.get(c);
+        Integer value = storage.get(c);
 
         if (value == null) {
-            hashMap.put(c, 1);
+            storage.put(c, 1);
             return;
         }
 
         if (value == -1)
-            hashMap.remove(c);
+            storage.remove(c);
         else
-            hashMap.put(c, value + 1);
+            storage.put(c, value + 1);
+    }
+
+    public Boolean isEmpty() {
+        return storage.isEmpty();
     }
 }

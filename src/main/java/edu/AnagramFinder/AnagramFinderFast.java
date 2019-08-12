@@ -16,19 +16,18 @@ public class AnagramFinderFast {
 
         LOGGER.debug("Find anagram: '{}' at text: {}", anagramText, text);
 
-        CharCounters charCounters = new CharCounters(anagramText);
-        HashMap<Character, Integer> anagram = charCounters.getHashMap();
+        CharCounters anagram = CharCounters.makeFromString(anagramText);
 
         for (int i = 0; i < anagramText.length(); i++) {
-            charCounters.subtractCharCount(text.charAt(i));
+            anagram.subtractCharCount(text.charAt(i));
         }
 
         if (anagram.isEmpty())
             return 0;
 
         for (int j = 0; j <= text.length() - anagramText.length() - 1; j++) {
-            charCounters.addCharCount(text.charAt(j));
-            charCounters.subtractCharCount(text.charAt(j + anagramText.length()));
+            anagram.addCharCount(text.charAt(j));
+            anagram.subtractCharCount(text.charAt(j + anagramText.length()));
 
             if (anagram.isEmpty())
                 return j + 1;
