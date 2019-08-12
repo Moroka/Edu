@@ -43,7 +43,7 @@ public class CharCounters {
             storage.put(c, value + 1);
     }
 
-    public Boolean isEmpty() {
+    public boolean isEmpty() {
         return storage.isEmpty();
     }
 }
