@@ -3,8 +3,6 @@ package edu.AnagramFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-
 public class AnagramFinderFast {
     private static final Logger LOGGER = LoggerFactory.getLogger(AnagramFinderFast.class);
 
@@ -14,7 +12,8 @@ public class AnagramFinderFast {
         if (anagramText.length() > text.length())
             return -1;
 
-        LOGGER.debug("Find anagram: '{}' at text: {}", anagramText, text);
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("Find anagram: '{}' at text: {}", anagramText, text);
 
         CharCounters anagram = CharCounters.makeFromString(anagramText);
 
@@ -34,6 +33,5 @@ public class AnagramFinderFast {
         }
 
         return -1;
-
     }
 }

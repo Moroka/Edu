@@ -12,7 +12,8 @@ public class AnagramFinder {
         if (anagramText.length() > text.length() || anagramText.length() == 0)
             return -1;
 
-        LOGGER.debug("Find anagram: '{}' at text: {}", anagramText, text);
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("Find anagram: '{}' at text: {}", anagramText, text);
 
         HashMap<Character, Integer> anagram = getHashMap(anagramText);
 
