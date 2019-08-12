@@ -13,7 +13,7 @@ public class CharCounters {
     public HashMap<Character, Integer> getHashMap() {
         hashMap = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
-            if (hashMap.containsKey(s.charAt(i))){
+            if (hashMap.containsKey(s.charAt(i))) {
                 hashMap.put(s.charAt(i), hashMap.get(s.charAt(i)) + 1);
             } else {
                 hashMap.put(s.charAt(i), 1);
@@ -25,14 +25,15 @@ public class CharCounters {
     public void subtractCharCount(char c) {
         Integer value = hashMap.get(c);
 
-        if (value == null){
+        if (value == null) {
             hashMap.put(c, -1);
-        } else {
-            if (value == 1)
-                hashMap.remove(c);
-            else
-                hashMap.put(c, value - 1);
+            return;
         }
+
+        if (value == 1)
+            hashMap.remove(c);
+        else
+            hashMap.put(c, value - 1);
     }
 
     public void addCharCount(char c) {

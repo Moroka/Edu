@@ -24,10 +24,10 @@ public class AnagramFinderSpeedTest {
         HashMap<String, String> hashMap = generateHashMap(ITERATION_COUNT);
         HashMap<String, String> burningUpHashMap = generateHashMap(BURNING_UP_ITERATION_COUNT);
 
-        for (HashMap.Entry<String,String> entry : burningUpHashMap.entrySet())
+        for (HashMap.Entry<String, String> entry : burningUpHashMap.entrySet())
             burningUpJit(entry.getKey(), entry.getValue());
 
-        for (HashMap.Entry<String,String> entry : hashMap.entrySet())
+        for (HashMap.Entry<String, String> entry : hashMap.entrySet())
             calculateRuntime(entry.getKey(), entry.getValue());
 
         printNanoTime("[AnagramFinder] Total runtime is:", anagramFinderTotalTime);

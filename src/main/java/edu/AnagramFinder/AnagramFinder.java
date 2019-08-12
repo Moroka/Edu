@@ -29,7 +29,7 @@ public class AnagramFinder {
     private static HashMap<Character, Integer> getHashMap(String text) {
         HashMap<Character, Integer> hashMap = new HashMap<>();
         for (int i = 0; i < text.length(); i++) {
-            if (hashMap.containsKey(text.charAt(i))){
+            if (hashMap.containsKey(text.charAt(i))) {
                 hashMap.put(text.charAt(i), hashMap.get(text.charAt(i)) + 1);
             } else {
                 hashMap.put(text.charAt(i), 1);
