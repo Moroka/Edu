@@ -59,8 +59,8 @@ public class AnagramFinderSpeedTest {
     }
 
     private static String getRandomString(int maxLength) {
-        int randomLength = random.nextInt(maxLength);
-        StringBuilder s = new StringBuilder(randomLength);
+        final int randomLength = random.nextInt(maxLength);
+        final StringBuilder s = new StringBuilder(randomLength);
         for (int i = 0; i < randomLength; i++) {
             s.append((char) ('a' + random.nextInt(26)));
         }
@@ -68,15 +68,15 @@ public class AnagramFinderSpeedTest {
     }
 
     private static long measureTime(Runnable action) {
-        long nanos = System.nanoTime();
+        final long nanos = System.nanoTime();
         action.run();
         return System.nanoTime() - nanos;
     }
 
     private static void printMeasureTime(String prefix, long time) {
-        int seconds = (int) (time / 1000000000);
-        int milliseconds = (int) (time / 1000000) % 1000;
-        int nanoseconds = (int) (time % 1000000);
+        final int seconds = (int) (time / 1000000000);
+        final int milliseconds = (int) (time / 1000000) % 1000;
+        final int nanoseconds = (int) (time % 1000000);
         LOGGER.info("{} {}s|{}ms|{}ns", prefix, seconds, milliseconds, nanoseconds);
     }
 }
