@@ -3,6 +3,8 @@ package edu.AnagramFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -27,22 +29,22 @@ public class AnagramFinderSpeedTest {
         Arrays.stream(warmUpData).forEach(data -> AnagramFinder.getAnagramIndexAtText(data.anagramText, data.text));
 
         // Check 1st algorithm
-        final long anagramFinderTotalTime = Arrays.stream(testData)
+        final Duration anagramFinderTotalTime = Arrays.stream(testData)
                 .map((data) -> measureTime(() -> AnagramFinder.getAnagramIndexAtText(data.anagramText, data.text)))
-                .reduce(0L, Long::sum);
+                .reduce(Duration.ZERO, Duration::plus);
 
         // Warm up 2nd algorithm
         Arrays.stream(warmUpData).forEach(data -> AnagramFinderFast.getAnagramIndexAtText(data.anagramText, data.text));
 
         // Check 2nd algorithm
-        final long anagramFinderFastTotalTime = Arrays.stream(testData)
+        final Duration anagramFinderFastTotalTime = Arrays.stream(testData)
                 .map((data) -> measureTime(() -> AnagramFinder.getAnagramIndexAtText(data.anagramText, data.text)))
-                .reduce(0L, Long::sum);
+                .reduce(Duration.ZERO, Duration::plus);
 
         printMeasureTime("[AnagramFinder] Total runtime is:", anagramFinderTotalTime);
-        printMeasureTime("[AnagramFinder] Average runtime is:", anagramFinderTotalTime / ITERATION_COUNT);
+        printMeasureTime("[AnagramFinder] Average runtime is:", anagramFinderTotalTime.dividedBy(ITERATION_COUNT));
         printMeasureTime("[AnagramFinderFast] Total runtime is:", anagramFinderFastTotalTime);
-        printMeasureTime("[AnagramFinderFast] Average runtime is:", anagramFinderFastTotalTime / ITERATION_COUNT);
+        printMeasureTime("[AnagramFinderFast] Average runtime is:", anagramFinderFastTotalTime.dividedBy(ITERATION_COUNT));
     }
 
     private AnagramFinderSpeedTestData[] generateTestData(int size) {
@@ -62,16 +64,16 @@ public class AnagramFinderSpeedTest {
         return s.toString();
     }
 
-    private static long measureTime(Runnable action) {
-        final long nanos = System.nanoTime();
+    private static Duration measureTime(Runnable action) {
+        final Instant startTime = Instant.now();
         action.run();
-        return System.nanoTime() - nanos;
+        return Duration.between(startTime, Instant.now());
     }
 
-    private static void printMeasureTime(String prefix, long time) {
-        final int seconds = (int) (time / 1000000000);
-        final int milliseconds = (int) (time / 1000000) % 1000;
-        final int nanoseconds = (int) (time % 1000000);
+    private static void printMeasureTime(String prefix, Duration time) {
+        final int seconds = (int) time.toMinutes() / 60;
+        final int milliseconds = (int) time.toMillis();
+        final int nanoseconds = (int) time.toNanos();
         LOGGER.info("{} {}s|{}ms|{}ns", prefix, seconds, milliseconds, nanoseconds);
     }
 }
