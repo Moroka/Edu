@@ -2,7 +2,7 @@ package edu.AnagramFinder;
 
 import java.util.HashMap;
 
-public class CharCounters {
+public final class CharCounters {
     private final HashMap<Character, Integer> storage = new HashMap<>();
 
     private CharCounters() {

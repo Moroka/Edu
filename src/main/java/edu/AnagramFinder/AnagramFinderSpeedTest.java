@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Random;
 
-public class AnagramFinderSpeedTest {
+public final class AnagramFinderSpeedTest {
     private final Random random = new Random();
     private static final Logger LOGGER = LoggerFactory.getLogger(AnagramFinderSpeedTest.class);
     private static final int MAX_TEXT_LENGTH = 0x10000;

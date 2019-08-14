@@ -3,7 +3,7 @@ package edu.AnagramFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AnagramFinderFast {
+public final class AnagramFinderFast {
     private static final Logger LOGGER = LoggerFactory.getLogger(AnagramFinderFast.class);
 
     public static int getAnagramIndexAtText(String anagramText, String text) {
