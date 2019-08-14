@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class AnagramFinderSpeedTest {
     private final Random random = new Random();
@@ -24,9 +25,7 @@ public class AnagramFinderSpeedTest {
         final AnagramFinderSpeedTestData[] warmUpData = generateTestData(WARM_UP_ITERATION_COUNT);
 
         // Warm up 1st algorithm
-        for (AnagramFinderSpeedTestData data : warmUpData) {
-            AnagramFinder.getAnagramIndexAtText(data.anagramText, data.text);
-        }
+        Arrays.stream(warmUpData).forEach(data -> AnagramFinder.getAnagramIndexAtText(data.anagramText, data.text));
 
         // Check 1st algorithm
         final long anagramFinderTotalTime = Arrays.stream(testData)
@@ -34,9 +33,7 @@ public class AnagramFinderSpeedTest {
                 .reduce(0L, Long::sum);
 
         // Warm up 2nd algorithm
-        for (AnagramFinderSpeedTestData data : warmUpData) {
-            AnagramFinderFast.getAnagramIndexAtText(data.anagramText, data.text);
-        }
+        Arrays.stream(warmUpData).forEach(data -> AnagramFinderFast.getAnagramIndexAtText(data.anagramText, data.text));
 
         // Check 2nd algorithm
         final long anagramFinderFastTotalTime = Arrays.stream(testData)
