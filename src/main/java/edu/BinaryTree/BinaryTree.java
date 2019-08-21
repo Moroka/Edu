@@ -10,50 +10,46 @@ public class BinaryTree {
 
     private BinaryTreeNode root;
     private ArrayList<BinaryTreeNode> nodes = new ArrayList<>();
-    private ArrayList<BinaryTreeNode> repetitiveNodes = new ArrayList<>();
+    private int count = 0;
 
-    private BinaryTreeNode addRecursive(BinaryTreeNode current, char value) {
-        if (current != null) {
-            LOGGER.debug("Test {}", current.value);
-            if (current.value == value) {
-                repetitiveNodes.add(current);
-            }
-        } else {
-            LOGGER.debug("Create new node: {}", value);
-            BinaryTreeNode node = new BinaryTreeNode(value);
-            nodes.add(node);
-            return node;
-        }
+    private void addRecursive(BinaryTreeNode current, char value) {
+        count ++;
 
         if (current.left == null) {
             LOGGER.debug("Add left child to node {}: {}", current.value, value);
-            current.left = addRecursive(current.left, value);
-            return current.left;
+            current.left = createNode(value);
+            return;
         } else if (current.right == null) {
             LOGGER.debug("Add right child to node {}: {}", current.value, value);
-            current.right = addRecursive(current.right, value);
-            return current.right;
+            current.right = createNode(value);
+            return;
         }
 
-        if (current.left.left == null || current.left.right == null) {
-            current.left = addRecursive(current.left, value);
-            return current.left;
-        } else if (current.right.left == null || current.right.right == null) {
-            current.right = addRecursive(current.right, value);
-            return current.right;
-        }
-
-        return current;
+        addRecursive(count % 2 == 0 ? current.left : current.right, value);
     }
 
     private void add(char value) {
-        root = addRecursive(root, value);
+        if (root == null) {
+            LOGGER.debug("Create root node: {}", value);
+            root = createNode(value);
+        }
+        else
+            addRecursive(root, value);
+    }
+
+    private BinaryTreeNode createNode(char value) {
+        BinaryTreeNode node = new BinaryTreeNode(value);
+        nodes.add(node);
+        return node;
     }
 
     private void test() {
-        for (int i = 0; i < repetitiveNodes.size(); i++) {
-            System.out.println(repetitiveNodes.get(i));
-        }
+//        for (int i = 0; i < repetitiveNodes.size(); i++) {
+//            System.out.println(repetitiveNodes.get(i));
+//        }
+
+        System.out.println(root);
+        System.out.println(nodes);
     }
 
     public static boolean hasEqualSubtrees(String s) {
