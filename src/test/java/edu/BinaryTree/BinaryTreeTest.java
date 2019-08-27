@@ -1,4 +1,4 @@
-package edu.BinaryTree;
+package edu.binaryTree;
 
 import org.junit.Test;
 
@@ -11,19 +11,18 @@ public class BinaryTreeTest {
                   a
              b          c
            d   e      g   a
-                 f  i
         */
-        assertFalse(BinaryTree.hasEqualSubtrees("abcdefgai"));
+        BinaryTreeNode tree = BinaryTreeHelper.createTree("abd__e__cg__a__");
+        System.out.println(BinaryTreeHelper.printTreeRecursive(tree, ""));
     }
 
     @Test
-    public void equalSubtreesTest() {
+    public void repetitiveCharsTest2() {
         /*
                   a
-             b          b
-           d   e      d   e
-                 f  i
+             b          c
         */
-        assertFalse(BinaryTree.hasEqualSubtrees("abbdefdei"));
+//        BinaryTreeNode tree = BinaryTreeHelper.createTree("ab__c__");
+//        BinaryTreeHelper.printTreeRecursive(tree);
     }
 }
