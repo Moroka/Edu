@@ -1,4 +1,4 @@
-package edu.binaryTree;
+package edu.binarytree;
 
 import org.junit.Test;
 
@@ -10,7 +10,8 @@ public class BinaryTreeTest {
              b          c
            d   e      g   a
         */
-        BinaryTreeNode tree = BinaryTreeHelper.createTree("abd__e__cg__a__");
-        BinaryTreeHelper.printTree(tree);
+        BinaryTreeHelper treeHelper = new BinaryTreeHelper();
+        BinaryTreeNode node = treeHelper.createTree("abd__e__cg__a__");
+        BinaryTreeHelper.printTree(node);
     }
 }

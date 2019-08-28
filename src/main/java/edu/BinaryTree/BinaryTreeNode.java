@@ -1,24 +1,25 @@
-package edu.binaryTree;
+package edu.binarytree;
 
-public class BinaryTreeNode {
-    private int positionShift = 1;
+public final class BinaryTreeNode {
     private final char value;
-    public BinaryTreeNode left;
-    public BinaryTreeNode right;
+    private final BinaryTreeNode left;
+    private final BinaryTreeNode right;
 
-    public BinaryTreeNode(char value) {
+    public BinaryTreeNode(char value, BinaryTreeNode left, BinaryTreeNode right) {
         this.value = value;
+        this.left = left;
+        this.right = right;
     }
 
     public char getValue() {
         return value;
     }
 
-    public void incrementPositionShift(int shift) {
-        positionShift += shift;
+    public BinaryTreeNode getLeftNode() {
+        return left;
     }
 
-    public int getPositionShift() {
-        return positionShift;
+    public BinaryTreeNode getRightNode() {
+        return right;
     }
 }

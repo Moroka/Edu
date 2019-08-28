@@ -1,37 +1,35 @@
-package edu.binaryTree;
+package edu.binarytree;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BinaryTreeHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeHelper.class);
+    private String str;
+    private int strIndex;
 
-    public static BinaryTreeNode createTree(String s) {
-        LOGGER.debug("Create tree from '{}'", s);
-        return createTreeRecursive(s, 0);
+    public BinaryTreeNode createTree(String s) {
+        str = s;
+        strIndex = 0;
+        LOGGER.debug("Create tree from '{}'", str);
+        return createTreeRecursive();
     }
 
-    private static BinaryTreeNode createTreeRecursive(String s, int pos) {
-        if (s.charAt(pos) == '_')
+    private BinaryTreeNode createTreeRecursive() {
+        char c = getNextChar();
+        strIndex += 1;
+
+        if (c == '_')
             return null;
 
-        final BinaryTreeNode tree = new BinaryTreeNode(s.charAt(pos));
+        final BinaryTreeNode leftNode = createTreeRecursive();
+        final BinaryTreeNode rightNode = createTreeRecursive();
 
-        final BinaryTreeNode leftNode = createTreeRecursive(s, pos + tree.getPositionShift());
-        if (leftNode != null) {
-            tree.incrementPositionShift(leftNode.getPositionShift());
-            tree.left = leftNode;
-        } else
-            tree.incrementPositionShift(1);
+        return new BinaryTreeNode(c, leftNode, rightNode);
+    }
 
-        final BinaryTreeNode rightNode = createTreeRecursive(s, pos + tree.getPositionShift());
-        if (rightNode != null) {
-            tree.incrementPositionShift(rightNode.getPositionShift());
-            tree.right = rightNode;
-        } else
-            tree.incrementPositionShift(1);
-
-        return tree;
+    private char getNextChar() {
+        return str.charAt(strIndex);
     }
 
     public static void printTree(BinaryTreeNode tree) {
@@ -41,7 +39,7 @@ public class BinaryTreeHelper {
         }
 
         System.out.print(tree.getValue());
-        printTree(tree.left);
-        printTree(tree.right);
+        printTree(tree.getLeftNode());
+        printTree(tree.getRightNode());
     }
 }
