@@ -34,12 +34,14 @@ public class BinaryTreeHelper {
         return tree;
     }
 
-    public static String printTreeRecursive(BinaryTreeNode tree, String result) {
-        result += tree.getValue();
-        System.out.println(result);
-        if (tree.left != null) printTreeRecursive(tree.left, result);
-        if (tree.right != null) printTreeRecursive(tree.right, result);
+    public static void printTree(BinaryTreeNode tree) {
+        if (tree == null) {
+            System.out.print("_");
+            return;
+        }
 
-        return result;
+        System.out.print(tree.getValue());
+        printTree(tree.left);
+        printTree(tree.right);
     }
 }
