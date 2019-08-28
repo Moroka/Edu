@@ -9,9 +9,9 @@ public class BinaryTreeHelper {
     private int strIndex;
 
     public BinaryTreeNode createTree(String s) {
+        LOGGER.debug("Create tree from '{}'", s);
         str = s;
         strIndex = 0;
-        LOGGER.debug("Create tree from '{}'", str);
         return createTreeRecursive();
     }
 
