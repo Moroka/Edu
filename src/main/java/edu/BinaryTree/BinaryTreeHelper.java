@@ -6,18 +6,26 @@ import org.slf4j.LoggerFactory;
 public class BinaryTreeHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeHelper.class);
     private String str;
+    private String treeToString;
     private int strIndex;
 
-    public BinaryTreeNode createTree(String s) {
+    public static BinaryTreeNode createTree(String s) {
         LOGGER.debug("Create tree from '{}'", s);
-        str = s;
-        strIndex = 0;
-        return createTreeRecursive();
+
+        BinaryTreeHelper helper = new BinaryTreeHelper();
+        helper.str = s;
+        helper.strIndex = 0;
+        return helper.createTreeRecursive();
+    }
+
+    public static String treeToString(BinaryTreeNode node) {
+        BinaryTreeHelper helper = new BinaryTreeHelper();
+        helper.treeToString = "";
+        return helper.treeToStringRecursive(node);
     }
 
     private BinaryTreeNode createTreeRecursive() {
         char c = getNextChar();
-        strIndex += 1;
 
         if (c == '_')
             return null;
@@ -29,17 +37,19 @@ public class BinaryTreeHelper {
     }
 
     private char getNextChar() {
-        return str.charAt(strIndex);
+        strIndex += 1;
+        return str.charAt(strIndex - 1);
     }
 
-    public static void printTree(BinaryTreeNode tree) {
+    private String treeToStringRecursive(BinaryTreeNode tree) {
         if (tree == null) {
-            System.out.print("_");
-            return;
+            treeToString += "_";
+            return treeToString;
         }
 
-        System.out.print(tree.getValue());
-        printTree(tree.getLeftNode());
-        printTree(tree.getRightNode());
+        treeToString += tree.getValue();
+        treeToString = treeToStringRecursive(tree.getLeftNode());
+        treeToString = treeToStringRecursive(tree.getRightNode());
+        return treeToString;
     }
 }
