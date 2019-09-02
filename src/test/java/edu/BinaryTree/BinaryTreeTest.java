@@ -5,14 +5,14 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class BinaryTreeTest {
+public final class BinaryTreeTest {
     @Test
     public void oneNodeTreeTest() {
         /*
                   a
         */
-        String inputString = "a__";
-        BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
+        final String inputString = "a__";
+        final BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
         assertEquals(inputString, BinaryTreeHelper.treeToString(node));
     }
 
@@ -22,8 +22,8 @@ public class BinaryTreeTest {
                   a
               b
         */
-        String inputString = "ab___";
-        BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
+        final String inputString = "ab___";
+        final BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
         assertEquals(inputString, BinaryTreeHelper.treeToString(node));
     }
 
@@ -34,8 +34,8 @@ public class BinaryTreeTest {
                   a
              b          c
         */
-        String inputString = "ab__c__";
-        BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
+        final String inputString = "ab__c__";
+        final BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
         assertEquals(inputString, BinaryTreeHelper.treeToString(node));
     }
 
@@ -46,22 +46,23 @@ public class BinaryTreeTest {
              b          c
            d   e      g   a
         */
-        String inputString = "abd__e__cg__a__";
-        BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
+        final String inputString = "abd__e__cg__a__";
+        final BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
         assertEquals(inputString, BinaryTreeHelper.treeToString(node));
+        BinaryTreeHelper.visualizeTree(node);
     }
 
     @Test
     public void tooShortTreeTest() {
-        String inputString = "__";
-        BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
+        final String inputString = "__";
+        final BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
         assertNull(node);
     }
 
     @Test
     public void invalidEndTreeTest() {
-        String inputString = "ab_";
-        BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
+        final String inputString = "ab_";
+        final BinaryTreeNode node = BinaryTreeHelper.createTree(inputString);
         assertNull(node);
     }
 }
