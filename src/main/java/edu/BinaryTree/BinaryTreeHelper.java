@@ -7,27 +7,26 @@ import java.util.ArrayList;
 
 public final class BinaryTreeHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeHelper.class);
-    private String str;
-    private String treeToString;
+    private final String str;
     private int strIndex;
 
-    public static BinaryTreeNode createTree(String s) {
-        if (!canCreateTree(s)) {
-            LOGGER.debug("Invalid input text: '{}'", s);
+    public BinaryTreeHelper(String s) {
+        this.str = s;
+    }
+
+    public BinaryTreeNode createTree() {
+        if (!canCreateTree(str)) {
+            LOGGER.debug("Invalid input text: '{}'", str);
             return null;
         } else {
-            LOGGER.debug("Create tree from '{}'", s);
+            LOGGER.debug("Create tree from '{}'", str);
 
-            BinaryTreeHelper helper = new BinaryTreeHelper();
-            helper.str = s;
-            return helper.createTreeRecursive();
+            return createTreeRecursive();
         }
     }
 
     public static String treeToString(BinaryTreeNode node) {
-        BinaryTreeHelper helper = new BinaryTreeHelper();
-        helper.treeToString = "";
-        return helper.treeToStringRecursive(node);
+        return treeToStringRecursive(node, "");
     }
 
     public static void visualizeTree(BinaryTreeNode node) {
@@ -42,8 +41,8 @@ public final class BinaryTreeHelper {
                     nextLevel.add(i.getLeftNode());
                 if (i.getRightNode() != null)
                     nextLevel.add(i.getRightNode());
-            final String currentSeparator = separator(depth + 1);
-            System.out.print(currentSeparator + i.getValue() + currentSeparator);
+                final String currentSeparator = separator(depth + 1);
+                System.out.print(currentSeparator + i.getValue() + currentSeparator);
             }
             System.out.println();
             depth /= 2;
@@ -69,16 +68,16 @@ public final class BinaryTreeHelper {
         return str.charAt(strIndex - 1);
     }
 
-    private String treeToStringRecursive(BinaryTreeNode tree) {
+    private static String treeToStringRecursive(BinaryTreeNode tree, String result) {
         if (tree == null) {
-            treeToString += "_";
-            return treeToString;
+            result += "_";
+            return result;
         }
 
-        treeToString += tree.getValue();
-        treeToString = treeToStringRecursive(tree.getLeftNode());
-        treeToString = treeToStringRecursive(tree.getRightNode());
-        return treeToString;
+        result += tree.getValue();
+        result = treeToStringRecursive(tree.getLeftNode(), result);
+        result = treeToStringRecursive(tree.getRightNode(), result);
+        return result;
     }
 
     private static int treeDepth(BinaryTreeNode tree) {
@@ -91,10 +90,10 @@ public final class BinaryTreeHelper {
         return s.substring(s.length() - 2).equals("__");
     }
 
-    private static String separator(int n){
+    private static String separator(int n) {
         StringBuilder sb = new StringBuilder();
 
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             sb.append("  ");
         }
         return sb.toString();
