@@ -14,7 +14,7 @@ public final class BinaryTreeTest {
         final String inputString = "a__";
         final BinaryTreeHelper helper = new BinaryTreeHelper(inputString);
         final BinaryTreeNode node = helper.createTree();
-        assertEquals(inputString, helper.treeToString(node));
+        assertEquals(inputString, BinaryTreeHelper.treeToString(node));
     }
 
     @Test
@@ -26,7 +26,7 @@ public final class BinaryTreeTest {
         final String inputString = "ab___";
         final BinaryTreeHelper helper = new BinaryTreeHelper(inputString);
         final BinaryTreeNode node = helper.createTree();
-        assertEquals(inputString, helper.treeToString(node));
+        assertEquals(inputString, BinaryTreeHelper.treeToString(node));
     }
 
 
@@ -39,7 +39,7 @@ public final class BinaryTreeTest {
         final String inputString = "ab__c__";
         final BinaryTreeHelper helper = new BinaryTreeHelper(inputString);
         final BinaryTreeNode node = helper.createTree();
-        assertEquals(inputString, helper.treeToString(node));
+        assertEquals(inputString, BinaryTreeHelper.treeToString(node));
     }
 
     @Test
@@ -52,7 +52,7 @@ public final class BinaryTreeTest {
         final String inputString = "abd__e__cg__a__";
         final BinaryTreeHelper helper = new BinaryTreeHelper(inputString);
         final BinaryTreeNode node = helper.createTree();
-        assertEquals(inputString, helper.treeToString(node));
+        assertEquals(inputString, BinaryTreeHelper.treeToString(node));
         BinaryTreeHelper.visualizeTree(node);
     }
 
