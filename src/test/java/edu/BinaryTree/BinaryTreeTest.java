@@ -93,4 +93,9 @@ public final class BinaryTreeTest {
         final BinaryTreeNode node = tree.createTree();
         assertNotEquals(inputString, BinaryTreeHelper.treeToString(node));
     }
+
+    @Test
+    public void treeGeneratorTest() {
+        System.out.println(BinaryTreeHelper.generateTree());
+    }
 }

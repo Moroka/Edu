@@ -1,6 +1,7 @@
 package edu.binarytree;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public final class BinaryTreeHelper {
     public static String treeToString(BinaryTreeNode node) {
@@ -27,6 +28,27 @@ public final class BinaryTreeHelper {
             currentLevel = nextLevel;
             nextLevel = new ArrayList<>();
         }
+    }
+
+    public static String generateTree() {
+        return generateTreeRecursive("", 100);
+    }
+
+    private static String generateTreeRecursive(String result, int chance) {
+        result += generateChar(chance);
+        if (result.length() > 4) {
+            if (result.substring(result.length() - 2).equals("__"))
+                return result;
+        }
+
+        return generateTreeRecursive(result, chance - 5);
+    }
+
+    private static char generateChar(int chance) {
+        final Random random = new Random();
+        if (random.nextInt(100) <= chance)
+            return (char) ('a' + random.nextInt(26));
+        else return '_';
     }
 
     private static String treeToStringRecursive(BinaryTreeNode tree, String result) {
