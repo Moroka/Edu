@@ -15,13 +15,13 @@ public final class BinaryTreeHelper {
         currentLevel.add(node);
 
         while (!currentLevel.isEmpty()) {
-            for (BinaryTreeNode i : currentLevel) {
+            for (BinaryTreeNode currentLevelNode : currentLevel) {
                 final String currentSeparator = separator(depth + 1);
-                if (i != null) {
-                    nextLevel.add(i.getLeftNode());
-                    nextLevel.add(i.getRightNode());
+                if (currentLevelNode != null) {
+                    nextLevel.add(currentLevelNode.getLeftNode());
+                    nextLevel.add(currentLevelNode.getRightNode());
                 }
-                System.out.print(currentSeparator + (i != null ? i.getValue() : "*") + currentSeparator);
+                System.out.print(currentSeparator + (currentLevelNode != null ? currentLevelNode.getValue() : " ") + currentSeparator);
             }
             System.out.println();
             depth /= 2;
@@ -30,24 +30,27 @@ public final class BinaryTreeHelper {
         }
     }
 
-    public static String generateTree() {
-        return generateTreeRecursive("", 100);
+    public static BinaryTreeNode generateTree() {
+        return generateTreeRecursive(1d);
     }
 
-    private static String generateTreeRecursive(String result, int chance) {
-        result += generateChar(chance);
-        if (result.length() > 4) {
-            if (result.substring(result.length() - 2).equals("__"))
-                return result;
-        }
-
-        return generateTreeRecursive(result, chance - 5);
-    }
-
-    private static char generateChar(int chance) {
+    private static BinaryTreeNode generateTreeRecursive(double chance) {
         final Random random = new Random();
-        if (random.nextInt(100) <= chance)
+        char c = generateChar(chance, random);
+
+        if (c == '_')
+            return null;
+
+        final BinaryTreeNode leftNode = generateTreeRecursive(chance - 0.1d);
+        final BinaryTreeNode rightNode = generateTreeRecursive(chance - 0.1d);
+
+        return new BinaryTreeNode(c, leftNode, rightNode);
+    }
+
+    private static char generateChar(double chance, Random random) {
+        if (random.nextDouble() <= chance) {
             return (char) ('a' + random.nextInt(26));
+        }
         else return '_';
     }
 

@@ -3,7 +3,7 @@ package edu.binarytree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class BinaryTreeBuilder {
+final class BinaryTreeBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeHelper.class);
     private final String str;
     private int strIndex;

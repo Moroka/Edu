@@ -96,6 +96,9 @@ public final class BinaryTreeTest {
 
     @Test
     public void treeGeneratorTest() {
-        System.out.println(BinaryTreeHelper.generateTree());
+        final BinaryTreeNode tree = BinaryTreeHelper.generateTree();
+        BinaryTreeHelper.visualizeTree(tree);
+
+        System.out.println(BinaryTreeHelper.treeToString(tree));
     }
 }
