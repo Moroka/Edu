@@ -30,19 +30,19 @@ public final class BinaryTreeHelper {
         }
     }
 
-    public static BinaryTreeNode generateTree() {
-        return generateTreeRecursive(1d);
+    public static BinaryTreeNode generateTree(double desireToNullSpeed) {
+        return generateTreeRecursive(1d, desireToNullSpeed);
     }
 
-    private static BinaryTreeNode generateTreeRecursive(double chance) {
+    private static BinaryTreeNode generateTreeRecursive(double chance, double desireToNullSpeed) {
         final Random random = new Random();
         char c = generateChar(chance, random);
 
         if (c == '_')
             return null;
 
-        final BinaryTreeNode leftNode = generateTreeRecursive(chance - 0.1d);
-        final BinaryTreeNode rightNode = generateTreeRecursive(chance - 0.1d);
+        final BinaryTreeNode leftNode = generateTreeRecursive(chance - desireToNullSpeed, desireToNullSpeed);
+        final BinaryTreeNode rightNode = generateTreeRecursive(chance - desireToNullSpeed, desireToNullSpeed);
 
         return new BinaryTreeNode(c, leftNode, rightNode);
     }
@@ -50,8 +50,8 @@ public final class BinaryTreeHelper {
     private static char generateChar(double chance, Random random) {
         if (random.nextDouble() <= chance) {
             return (char) ('a' + random.nextInt(26));
-        }
-        else return '_';
+        } else
+            return '_';
     }
 
     private static String treeToStringRecursive(BinaryTreeNode tree, String result) {

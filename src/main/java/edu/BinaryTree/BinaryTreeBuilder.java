@@ -13,14 +13,13 @@ final class BinaryTreeBuilder {
     }
 
     public BinaryTreeNode createTree() {
-        if (!canCreateTree(str)) {
-            LOGGER.debug("Invalid input text: '{}'", str);
+        BinaryTreeNode tree = createTreeRecursive();
+        if (!BinaryTreeHelper.treeToString(tree).equals(str)) {
+            LOGGER.debug("Invalid input format: {}", str);
             return null;
-        } else {
-            LOGGER.debug("Create tree from '{}'", str);
-
-            return createTreeRecursive();
         }
+
+        return tree;
     }
 
     private BinaryTreeNode createTreeRecursive() {
@@ -35,13 +34,9 @@ final class BinaryTreeBuilder {
         return new BinaryTreeNode(c, leftNode, rightNode);
     }
 
-    private static boolean canCreateTree(String s) {
-        if (s.length() < 3)
-            return false;
-        return s.substring(s.length() - 2).equals("__");
-    }
-
     private char getNextChar() {
+        if (strIndex + 1 > str.length())
+            return '_';
         strIndex += 1;
         return str.charAt(strIndex - 1);
     }
