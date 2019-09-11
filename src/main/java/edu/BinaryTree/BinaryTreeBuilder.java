@@ -3,8 +3,11 @@ package edu.binarytree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+
 final class BinaryTreeBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeHelper.class);
+    private ArrayList<BinaryTreeNode> nodes = new ArrayList<>();
     private final String str;
     private int strIndex;
 
@@ -22,6 +25,10 @@ final class BinaryTreeBuilder {
         return tree;
     }
 
+    public ArrayList<BinaryTreeNode> getNodes() {
+        return nodes;
+    }
+
     private BinaryTreeNode createTreeRecursive() {
         char c = getNextChar();
 
@@ -31,7 +38,9 @@ final class BinaryTreeBuilder {
         final BinaryTreeNode leftNode = createTreeRecursive();
         final BinaryTreeNode rightNode = createTreeRecursive();
 
-        return new BinaryTreeNode(c, leftNode, rightNode);
+        BinaryTreeNode node = new BinaryTreeNode(c, leftNode, rightNode);
+        nodes.add(node);
+        return node;
     }
 
     private char getNextChar() {

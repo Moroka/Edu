@@ -3,6 +3,8 @@ package edu.binarytree;
 import org.junit.Test;
 
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public final class BinaryTreeTest {
@@ -100,5 +102,18 @@ public final class BinaryTreeTest {
         BinaryTreeHelper.visualizeTree(tree);
 
         System.out.println(BinaryTreeHelper.treeToString(tree));
+    }
+
+    @Test
+    public void equalSubTreesTest() {
+        /*
+                  a
+             b          b
+        */
+        final String inputString = "ab__b__";
+        final BinaryTreeBuilder tree = new BinaryTreeBuilder(inputString);
+        final BinaryTreeNode node = tree.createTree();
+        final ArrayList<BinaryTreeNode> nodes = tree.getNodes();
+        assertTrue(BinaryTreeHelper.hasEqualSubtrees(nodes));
     }
 }
