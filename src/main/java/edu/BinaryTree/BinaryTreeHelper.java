@@ -54,7 +54,7 @@ public final class BinaryTreeHelper {
         return treeNodes;
     }
 
-    private static boolean hasEqualSubtrees(ArrayList<BinaryTreeNode> treeNodes) {
+    private static boolean hasEqualSubtrees(List<BinaryTreeNode> treeNodes) {
         HashMap<String, Integer> storage = new HashMap<>();
 
         for (BinaryTreeNode node : treeNodes) {
