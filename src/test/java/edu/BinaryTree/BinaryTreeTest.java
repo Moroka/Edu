@@ -113,7 +113,7 @@ public final class BinaryTreeTest {
         final String inputString = "ab__b__";
         final BinaryTreeBuilder tree = new BinaryTreeBuilder(inputString);
         final BinaryTreeNode node = tree.createTree();
-        final ArrayList<BinaryTreeNode> nodes = tree.getNodes();
-        assertTrue(BinaryTreeHelper.hasEqualSubtrees(nodes));
+
+        assertTrue(BinaryTreeHelper.hasEqualSubtrees(node));
     }
 }

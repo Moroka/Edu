@@ -1,9 +1,6 @@
 package edu.binarytree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 public final class BinaryTreeHelper {
     public static String treeToString(BinaryTreeNode node) {
@@ -36,34 +33,60 @@ public final class BinaryTreeHelper {
         return generateTreeRecursive(1d, desireToNullSpeed);
     }
 
-    public static boolean hasEqualSubtrees(ArrayList<BinaryTreeNode> treeNodes) {
-        HashMap<BinaryTreeNode, HashSet<Character>> storage = new HashMap<>();
-        for (BinaryTreeNode node : treeNodes) {
-            storage.put(node, getTreeChars(node));
+    public static boolean hasEqualSubtrees(BinaryTreeNode tree) {
+        ArrayList<BinaryTreeNode> treeNodes = getTreeNodes(tree);
+        return hasEqualSubtrees(treeNodes);
+    }
+
+    private static ArrayList<BinaryTreeNode> getTreeNodes(BinaryTreeNode tree) {
+        return getTreeNodesRecursive(tree, new ArrayList<>());
+    }
+
+    private static ArrayList<BinaryTreeNode> getTreeNodesRecursive(BinaryTreeNode tree, ArrayList<BinaryTreeNode> treeNodes) {
+        if (tree == null) {
+            return treeNodes;
         }
 
-        for (HashMap.Entry<BinaryTreeNode, HashSet<Character>> entry1 : storage.entrySet()) {
-            for (HashMap.Entry<BinaryTreeNode, HashSet<Character>> entry2 : storage.entrySet()) {
-                if (entry1.getValue().hashCode() == entry2.getValue().hashCode())
-                    return true;
-            }
+        treeNodes.add(tree);
+
+        treeNodes = getTreeNodesRecursive(tree.getLeftNode(), treeNodes);
+        treeNodes = getTreeNodesRecursive(tree.getRightNode(), treeNodes);
+        return treeNodes;
+    }
+
+    private static boolean hasEqualSubtrees(ArrayList<BinaryTreeNode> treeNodes) {
+        HashMap<String, Integer> storage = new HashMap<>();
+
+        for (BinaryTreeNode node : treeNodes) {
+            final String str = treeUniqueChars(node);
+            final Integer value = storage.get(str);
+            if (value == null)
+                storage.put(str, 1);
+            else
+                return true;
         }
 
         return false;
     }
 
-    private static HashSet<Character> getTreeChars(BinaryTreeNode tree) {
-        return getTreeCharsRecursive(tree, new HashSet<>());
+    private static String treeUniqueChars(BinaryTreeNode tree) {
+        String result = treeUniqueCharsRecursive(tree, "");
+        char[] tempArray = result.toCharArray();
+        Arrays.sort(tempArray);
+
+        return new String(tempArray);
     }
 
-    private static HashSet<Character> getTreeCharsRecursive(BinaryTreeNode tree, HashSet<Character> result) {
+    private static String treeUniqueCharsRecursive(BinaryTreeNode tree, String result) {
         if (tree == null) {
             return result;
         }
 
-        result.add(tree.getValue());
-        result = getTreeCharsRecursive(tree.getLeftNode(), result);
-        result = getTreeCharsRecursive(tree.getRightNode(), result);
+        if (result.indexOf(tree.getValue()) == -1)
+            result += (tree.getValue());
+
+        result = treeUniqueCharsRecursive(tree.getLeftNode(), result);
+        result = treeUniqueCharsRecursive(tree.getRightNode(), result);
         return result;
     }
 

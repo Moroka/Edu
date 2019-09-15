@@ -3,11 +3,8 @@ package edu.binarytree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-
 final class BinaryTreeBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeHelper.class);
-    private ArrayList<BinaryTreeNode> nodes = new ArrayList<>();
     private final String str;
     private int strIndex;
 
@@ -17,16 +14,12 @@ final class BinaryTreeBuilder {
 
     public BinaryTreeNode createTree() {
         BinaryTreeNode tree = createTreeRecursive();
-        if (!BinaryTreeHelper.treeToString(tree).equals(str)) {
-            LOGGER.debug("Invalid input format: {}", str);
+        if (strIndex != str.length()) {
+            LOGGER.error("Invalid input format: {}", str);
             return null;
         }
 
         return tree;
-    }
-
-    public ArrayList<BinaryTreeNode> getNodes() {
-        return nodes;
     }
 
     private BinaryTreeNode createTreeRecursive() {
@@ -38,15 +31,18 @@ final class BinaryTreeBuilder {
         final BinaryTreeNode leftNode = createTreeRecursive();
         final BinaryTreeNode rightNode = createTreeRecursive();
 
-        BinaryTreeNode node = new BinaryTreeNode(c, leftNode, rightNode);
-        nodes.add(node);
-        return node;
+        return new BinaryTreeNode(c, leftNode, rightNode);
     }
 
     private char getNextChar() {
-        if (strIndex + 1 > str.length())
-            return '_';
         strIndex += 1;
-        return str.charAt(strIndex - 1);
+        char result = '_';
+        try {
+            result = str.charAt(strIndex - 1);
+        } catch (StringIndexOutOfBoundsException e) {
+            LOGGER.error("Invalid input format. Cant get char at index: {}", (strIndex - 1));
+        }
+
+        return result;
     }
 }
