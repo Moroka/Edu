@@ -70,8 +70,8 @@ public final class BinaryTreeHelper {
     }
 
     private static String treeUniqueChars(BinaryTreeNode tree) {
-        String result = treeUniqueCharsRecursive(tree, "");
-        char[] tempArray = result.toCharArray();
+        final String result = treeUniqueCharsRecursive(tree, "");
+        final char[] tempArray = result.toCharArray();
         Arrays.sort(tempArray);
 
         return new String(tempArray);
@@ -83,7 +83,7 @@ public final class BinaryTreeHelper {
         }
 
         if (result.indexOf(tree.getValue()) == -1)
-            result += (tree.getValue());
+            result += tree.getValue();
 
         result = treeUniqueCharsRecursive(tree.getLeftNode(), result);
         result = treeUniqueCharsRecursive(tree.getRightNode(), result);
