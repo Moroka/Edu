@@ -94,23 +94,19 @@ public final class BinaryTreeHelper {
      */
     public static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode tree) {
         final List<BinaryTreeNode> nodes = getTreeNodesRecursive(tree);
-        final HashMap<BinaryTreeNodeSigned, Integer> storage = new HashMap<>();
+        final HashMap<Integer, BinaryTreeNode> storage = new HashMap<>();
         final BinaryTreeNode[] result = new BinaryTreeNode[2];
 
         for (BinaryTreeNode node : nodes) {
-            final BinaryTreeNodeSigned treeToBinaryRepresentation = new BinaryTreeNodeSigned(node, binaryRepresentationToInt(treeBinaryRepresentation(node)));
-            final Integer value = storage.get(treeToBinaryRepresentation);
+            final int id = treeBinaryRepresentation(node);
+            final BinaryTreeNode value = storage.get(id);
             if (value == null) {
-                storage.put(treeToBinaryRepresentation, 1);
+                storage.put(id, node);
             } else {
                 result[0] = node;
-                for (Map.Entry<BinaryTreeNodeSigned, Integer> entry : storage.entrySet()) {
-                    if (entry.getValue() == binaryRepresentationToInt(treeBinaryRepresentation(node)))
-                        result[1] = entry.getKey().getNode();
-                }
+                result[1] = value;
             }
         }
-
         return result;
     }
 
@@ -127,40 +123,15 @@ public final class BinaryTreeHelper {
         return result;
     }
 
-    private static int[] treeBinaryRepresentation(BinaryTreeNode tree) {
-        if (tree == null) {
-            return new int[26];
-        }
-
-        int[] result = addCharToBinaryRepresentation(tree.getValue(), new int[26]);
-        result = sumArrays(result, treeBinaryRepresentation(tree.getLeftNode()));
-        if (result != null)
-            result = sumArrays(result, treeBinaryRepresentation(tree.getRightNode()));
-        return result;
-    }
-
-    private static int binaryRepresentationToInt(int[] arr) {
-        StringBuilder intArray = new StringBuilder();
-        for (int i = 0; i < arr.length; i++) {
-            intArray.append(arr[i]);
-        }
-        return Integer.parseInt(intArray.toString(), 2);
-    }
-
-    private static int[] addCharToBinaryRepresentation(char c, int[] arr) {
-        final int alphabetIndex = (int) c % 32;
-        if (arr[alphabetIndex] > 0)
-            return arr;
-        arr[alphabetIndex] = 1;
-        return arr;
-    }
-
-    private static int[] sumArrays(int[] firstArr, int[] secondArr) {
-        final int[] returnArray = new int[firstArr.length];
-        for (int i = 0; i < firstArr.length; i++) {
-            if (firstArr[i] == 1 || secondArr[i] == 1)
-                returnArray[i] = 1;
-        }
-        return returnArray;
+    private static int treeBinaryRepresentation(BinaryTreeNode tree) {
+//        if (tree == null) {
+//            return new int[26];
+//        }
+//
+//        int[] result = addCharToBinaryRepresentation(tree.getValue(), new int[26]);
+//        result = sumArrays(result, treeBinaryRepresentation(tree.getLeftNode()));
+//        if (result != null)
+//            result = sumArrays(result, treeBinaryRepresentation(tree.getRightNode()));
+        return 0;
     }
 }

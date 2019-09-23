@@ -111,6 +111,6 @@ public final class BinaryTreeTest {
         final BinaryTreeBuilder tree = new BinaryTreeBuilder(inputString);
         final BinaryTreeNode node = tree.createTree();
 
-        System.out.println(BinaryTreeHelper.hasSameCharSet(node)[0]);
+        final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
     }
 }
