@@ -101,7 +101,7 @@ public final class BinaryTreeTest {
     }
 
     @Test
-    public void equalSubTreesTest() {
+    public void hasSameCharSetTreesTest() {
         /*
                   a
              c          b
@@ -112,5 +112,21 @@ public final class BinaryTreeTest {
         final BinaryTreeNode node = tree.createTree();
 
         final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
+        assertTrue(foundedNodes[0] != null && foundedNodes[1] != null);
+    }
+
+    @Test
+    public void hasNotSameCharSetTreesTest() {
+        /*
+                  a
+             c          e
+           d   z      f   g
+        */
+        final String inputString = "acd__z__ef__g__";
+        final BinaryTreeBuilder tree = new BinaryTreeBuilder(inputString);
+        final BinaryTreeNode node = tree.createTree();
+
+        final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
+        assertFalse(foundedNodes[0] != null && foundedNodes[1] != null);
     }
 }

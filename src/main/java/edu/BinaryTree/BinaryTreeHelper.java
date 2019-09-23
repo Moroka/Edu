@@ -124,14 +124,22 @@ public final class BinaryTreeHelper {
     }
 
     private static int treeBinaryRepresentation(BinaryTreeNode tree) {
-//        if (tree == null) {
-//            return new int[26];
-//        }
-//
-//        int[] result = addCharToBinaryRepresentation(tree.getValue(), new int[26]);
-//        result = sumArrays(result, treeBinaryRepresentation(tree.getLeftNode()));
-//        if (result != null)
-//            result = sumArrays(result, treeBinaryRepresentation(tree.getRightNode()));
-        return 0;
+        return treeBinaryRepresentationRecursive(tree, 0);
+    }
+
+    private static int treeBinaryRepresentationRecursive(BinaryTreeNode tree, int binaryRepresentation) {
+        if (tree == null) {
+            return binaryRepresentation;
+        }
+
+        int result = modifyBinaryRepresentation(tree.getValue(), binaryRepresentation);
+        result = treeBinaryRepresentationRecursive(tree.getLeftNode(), result);
+        result = treeBinaryRepresentationRecursive(tree.getRightNode(), result);
+        return result;
+    }
+
+    private static int modifyBinaryRepresentation(char c, int binaryRepresentation) {
+        final int mask = 1 << (c - 'a');
+        return binaryRepresentation | mask;
     }
 }
