@@ -1,6 +1,9 @@
 package edu.binarytree;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.Stack;
 
 public final class BinaryTreeHelper {
 
@@ -93,11 +96,15 @@ public final class BinaryTreeHelper {
      * Detect same charset
      */
     public static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode tree) {
-        final List<BinaryTreeNode> nodes = getTreeNodesRecursive(tree);
         final HashMap<Integer, BinaryTreeNode> storage = new HashMap<>();
         final BinaryTreeNode[] result = new BinaryTreeNode[2];
+        final Stack<BinaryTreeNode> nodes = new Stack<>();
 
-        for (BinaryTreeNode node : nodes) {
+        nodes.push(tree);
+        while (!nodes.isEmpty()) {
+            BinaryTreeNode node = nodes.pop();
+            if (node == null)
+                continue;
             final int id = treeBinaryRepresentation(node);
             final BinaryTreeNode value = storage.get(id);
             if (value == null) {
@@ -106,20 +113,9 @@ public final class BinaryTreeHelper {
                 result[0] = node;
                 result[1] = value;
             }
+            nodes.push(node.getLeftNode());
+            nodes.push(node.getRightNode());
         }
-        return result;
-    }
-
-    private static List<BinaryTreeNode> getTreeNodesRecursive(BinaryTreeNode node) {
-        if (node == null) {
-            return Collections.emptyList();
-        }
-
-        final List<BinaryTreeNode> result = new ArrayList<>();
-
-        result.add(node);
-        result.addAll(getTreeNodesRecursive(node.getLeftNode()));
-        result.addAll(getTreeNodesRecursive(node.getRightNode()));
         return result;
     }
 

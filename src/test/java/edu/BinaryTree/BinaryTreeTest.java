@@ -2,7 +2,6 @@ package edu.binarytree;
 
 import org.junit.Test;
 
-
 import static org.junit.Assert.*;
 
 public final class BinaryTreeTest {
