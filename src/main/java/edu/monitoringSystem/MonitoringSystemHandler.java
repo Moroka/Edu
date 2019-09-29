@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class MonitoringSystemHandler {
+public class MonitoringSystemHandler implements IMonitoringSystemHandler {
     private static final int NANOSECONDS_TIME_TO_KEEP = 2;
 
     private static final String HIGH_LOAD_EVENTS = "[HIGH_LOAD]";
@@ -43,18 +43,18 @@ public class MonitoringSystemHandler {
         }
     }
 
-    private static void removeOutdatedEvents(String queueDescriptor, Queue<Timestamp> queue, Timestamp timestamp) {
-        while ((queue.size() > 0) && (timestamp.getTime() - queue.peek().getTime()) > NANOSECONDS_TIME_TO_KEEP) {
-            LOGGER.info("{} Remove event with timestamp: {}", queueDescriptor, queue.peek().getTime());
-            queue.remove();
-        }
-    }
-
     public void printStat() {
         LOGGER.info("----------------------------------");
         LOGGER.info("Statistics for last {} nanoseconds", NANOSECONDS_TIME_TO_KEEP);
         LOGGER.info("{} Events count: {}", HIGH_LOAD_EVENTS, highLoadEvents.size());
         LOGGER.info("{} Events count: {}", ERROR_EVENTS, errorEvents.size());
         LOGGER.info("{} Events count: {}", CONNECTION_REFUSED_EVENTS, connectionRefusedEvents.size());
+    }
+
+    private static void removeOutdatedEvents(String queueDescriptor, Queue<Timestamp> queue, Timestamp timestamp) {
+        while ((queue.size() > 0) && (timestamp.getTime() - queue.peek().getTime()) > NANOSECONDS_TIME_TO_KEEP) {
+            LOGGER.info("{} Remove event with timestamp: {}", queueDescriptor, queue.peek().getTime());
+            queue.remove();
+        }
     }
 }
