@@ -1,9 +1,6 @@
 package edu.binarytree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 public final class BinaryTreeHelper {
 
@@ -96,26 +93,27 @@ public final class BinaryTreeHelper {
      * Detect same charset
      */
     public static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode tree) {
-        final HashMap<Integer, BinaryTreeNode> storage = new HashMap<>();
-        final BinaryTreeNode[] result = new BinaryTreeNode[2];
-        final Stack<BinaryTreeNode> nodes = new Stack<>();
+        return hasSameCharSet(tree, new HashMap<>(), new BinaryTreeNode[2]);
+    }
 
-        nodes.push(tree);
-        while (!nodes.isEmpty()) {
-            BinaryTreeNode node = nodes.pop();
-            if (node == null)
-                continue;
-            final int id = treeBinaryRepresentation(node);
-            final BinaryTreeNode value = storage.get(id);
-            if (value == null) {
-                storage.put(id, node);
-            } else {
-                result[0] = node;
-                result[1] = value;
-            }
-            nodes.push(node.getLeftNode());
-            nodes.push(node.getRightNode());
+    private static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode node, HashMap<Integer, BinaryTreeNode> storage,
+                                                   BinaryTreeNode[] result) {
+        if (node == null) {
+            return new BinaryTreeNode[2];
         }
+
+        final int id = treeBinaryRepresentation(node);
+        final BinaryTreeNode value = storage.get(id);
+        if (value == null) {
+            storage.put(id, node);
+        } else {
+            result[0] = node;
+            result[1] = value;
+            return result;
+        }
+
+        hasSameCharSet(node.getLeftNode(), storage, result);
+        hasSameCharSet(node.getRightNode(), storage, result);
         return result;
     }
 

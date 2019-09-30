@@ -100,7 +100,22 @@ public final class BinaryTreeTest {
     }
 
     @Test
-    public void hasSameCharSetTreesTest() {
+    public void hasSameCharSetTreesTest1() {
+        /*
+                  a
+             b          b
+        */
+        final String inputString = "ab__b__";
+        final BinaryTreeBuilder tree = new BinaryTreeBuilder(inputString);
+        final BinaryTreeNode node = tree.createTree();
+
+        final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[0]), "b__");
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[1]), "b__");
+    }
+
+    @Test
+    public void hasSameCharSetTreesTest2() {
         /*
                   a
              c          b
@@ -111,7 +126,41 @@ public final class BinaryTreeTest {
         final BinaryTreeNode node = tree.createTree();
 
         final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
-        assertTrue(foundedNodes[0] != null && foundedNodes[1] != null);
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[0]), "bc__d__");
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[1]), "cd__b__");
+    }
+
+    @Test
+    public void hasSameCharSetTreesTest3() {
+        /*
+                  a
+             c          k
+           d   b      c   d
+        */
+        final String inputString = "acd__b__kc__d__";
+        final BinaryTreeBuilder tree = new BinaryTreeBuilder(inputString);
+        final BinaryTreeNode node = tree.createTree();
+
+        final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[0]), "d__");
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[1]), "d__");
+    }
+
+    @Test
+    public void hasSameCharSetTreesTest4() {
+        /*
+                      a
+                c            k
+            d     b     c        d
+         x    z       n        z    x
+        */
+        final String inputString = "acdx__z__b__kcn___dz__x__";
+        final BinaryTreeBuilder tree = new BinaryTreeBuilder(inputString);
+        final BinaryTreeNode node = tree.createTree();
+
+        final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[0]), "dz__x__");
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[1]), "dx__z__");
     }
 
     @Test
@@ -126,6 +175,7 @@ public final class BinaryTreeTest {
         final BinaryTreeNode node = tree.createTree();
 
         final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
-        assertFalse(foundedNodes[0] != null && foundedNodes[1] != null);
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[0]), "_");
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[1]), "_");
     }
 }
