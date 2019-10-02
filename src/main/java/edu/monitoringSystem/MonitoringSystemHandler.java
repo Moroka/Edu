@@ -3,49 +3,54 @@ package edu.monitoringSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Timestamp;
-import java.util.*;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 public class MonitoringSystemHandler implements IMonitoringSystemHandler {
     private static final int NANOSECONDS_TIME_TO_KEEP = 2;
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringSystemHandler.class);
-    private static final Map<String, Queue<Timestamp>> hashMap = new HashMap<>();
+    private static final Map<MonitoringSystemEventType, Queue<Instant>> hashMap = new HashMap<>();
 
     public MonitoringSystemHandler() {
+        createEventsMaps();
     }
 
     public void handleEvent(MonitoringSystemEventType event) {
-        final Date now = new Date();
-        final Timestamp timestamp = new Timestamp(now.getTime());
+        final Instant timestamp = Instant.now();
+        final Queue<Instant> queue = hashMap.get(event);
 
-        Queue<Timestamp> events = hashMap.get(event.name());
-        if (events != null)
-            hashMap.put(event.name(), addEvent(event.name(), events, timestamp));
-        else {
-            Queue<Timestamp> queue = new LinkedList<>();
-            hashMap.put(event.name(), addEvent(event.name(), queue, timestamp));
-        }
+        removeOutdatedEvents(event, queue, timestamp);
+        addEvent(event, queue, timestamp);
     }
 
     public void printStat() {
         LOGGER.info("----------------------------------");
         LOGGER.info("Statistics for last {} nanoseconds:", NANOSECONDS_TIME_TO_KEEP);
-        for (Map.Entry<String, Queue<Timestamp>> entry : hashMap.entrySet()) {
+        final Instant timestamp = Instant.now();
+        for (Map.Entry<MonitoringSystemEventType, Queue<Instant>> entry : hashMap.entrySet()) {
+            removeOutdatedEvents(entry.getKey(), entry.getValue(), timestamp);
             LOGGER.info("[{}] Events count: {}", entry.getKey(), entry.getValue().size());
         }
     }
 
-    private static Queue<Timestamp> addEvent(String eventDescriptor, Queue<Timestamp> queue, Timestamp timestamp) {
-        removeOutdatedEvents(eventDescriptor, queue, timestamp);
-        queue.add(timestamp);
-        LOGGER.info("[{}] Add event with timestamp: {}", eventDescriptor, timestamp.getTime());
-        return queue;
+    private static void createEventsMaps() {
+        for (int i = 0; i < MonitoringSystemEventType.values().length; i++) {
+            hashMap.put(MonitoringSystemEventType.values()[i], new LinkedList<>());
+        }
     }
 
-    private static void removeOutdatedEvents(String eventDescriptor, Queue<Timestamp> queue, Timestamp timestamp) {
-        while ((queue.size() > 0) && (timestamp.getTime() - queue.peek().getTime()) > NANOSECONDS_TIME_TO_KEEP) {
-            LOGGER.info("[{}] Remove event with timestamp: {}", eventDescriptor, queue.peek().getTime());
+    private static void removeOutdatedEvents(MonitoringSystemEventType event, Queue<Instant> queue, Instant timestamp) {
+        while ((queue.size() > 0) && (timestamp.toEpochMilli() - queue.peek().toEpochMilli()) > NANOSECONDS_TIME_TO_KEEP) {
+            LOGGER.info("[{}] Remove event with timestamp: {}", event.name(), queue.peek().toEpochMilli());
             queue.remove();
         }
+    }
+
+    private static void addEvent(MonitoringSystemEventType event, Queue<Instant> queue, Instant timestamp) {
+        queue.add(timestamp);
+        LOGGER.info("[{}] Add event with timestamp: {}", event.name(), timestamp.toEpochMilli());
     }
 }
