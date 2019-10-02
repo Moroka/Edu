@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
@@ -12,7 +12,7 @@ import java.util.Queue;
 public class MonitoringSystemHandler implements IMonitoringSystemHandler {
     private static final int NANOSECONDS_TIME_TO_KEEP = 2;
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringSystemHandler.class);
-    private static final Map<MonitoringSystemEventType, Queue<Instant>> hashMap = new HashMap<>();
+    private static final Map<MonitoringSystemEventType, Queue<Instant>> hashMap = new EnumMap<>(MonitoringSystemEventType.class);
 
     public MonitoringSystemHandler() {
         createEventsMaps();
