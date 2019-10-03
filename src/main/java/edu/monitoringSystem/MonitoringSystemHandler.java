@@ -3,6 +3,7 @@ package edu.monitoringSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Queue;
 
 public class MonitoringSystemHandler implements IMonitoringSystemHandler {
-    private static final int NANOSECONDS_TIME_TO_KEEP = 2;
+    static final Duration NANOSECONDS_TIME_TO_KEEP = Duration.ofNanos(20);
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringSystemHandler.class);
     private static final Map<MonitoringSystemEventType, Queue<Instant>> hashMap = new EnumMap<>(MonitoringSystemEventType.class);
 
@@ -26,14 +27,16 @@ public class MonitoringSystemHandler implements IMonitoringSystemHandler {
         addEvent(event, queue, timestamp);
     }
 
-    public void printStat() {
-        LOGGER.info("----------------------------------");
-        LOGGER.info("Statistics for last {} nanoseconds:", NANOSECONDS_TIME_TO_KEEP);
+    public Map<MonitoringSystemEventType, Queue<Instant>> getRecentEvents() {
         final Instant timestamp = Instant.now();
         for (Map.Entry<MonitoringSystemEventType, Queue<Instant>> entry : hashMap.entrySet()) {
             removeOutdatedEvents(entry.getKey(), entry.getValue(), timestamp);
-            LOGGER.info("[{}] Events count: {}", entry.getKey(), entry.getValue().size());
         }
+
+        final Map<MonitoringSystemEventType, Queue<Instant>> recentEvents = new EnumMap<>(MonitoringSystemEventType.class);
+        recentEvents.putAll(hashMap);
+
+        return recentEvents;
     }
 
     private static void createEventsMaps() {
@@ -43,7 +46,7 @@ public class MonitoringSystemHandler implements IMonitoringSystemHandler {
     }
 
     private static void removeOutdatedEvents(MonitoringSystemEventType event, Queue<Instant> queue, Instant timestamp) {
-        while ((queue.size() > 0) && (timestamp.toEpochMilli() - queue.peek().toEpochMilli()) > NANOSECONDS_TIME_TO_KEEP) {
+        while ((queue.size() > 0) && (Duration.between(queue.peek(), timestamp).toNanos() > NANOSECONDS_TIME_TO_KEEP.toNanos())) {
             LOGGER.info("[{}] Remove event with timestamp: {}", event.name(), queue.peek().toEpochMilli());
             queue.remove();
         }

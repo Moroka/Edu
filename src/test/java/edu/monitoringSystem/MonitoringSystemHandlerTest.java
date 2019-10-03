@@ -2,18 +2,24 @@ package edu.monitoringSystem;
 
 import org.junit.Test;
 
+import java.time.Instant;
+import java.util.Map;
+import java.util.Queue;
+
+import static org.junit.Assert.assertEquals;
+
 public class MonitoringSystemHandlerTest {
     @Test
     public void monitoringSystemRun() {
         final IMonitoringSystemHandler handler = new MonitoringSystemHandler();
-        MonitoringSystemEventDispatcher.sendRandomEventToMonitoring(2000, handler);
-        handler.printStat();
+        MonitoringSystemHelper.sendRandomEventToMonitoring(2000, handler);
+        MonitoringSystemHelper.printMonitoringEvents(handler.getRecentEvents());
     }
 
     @Test
     public void monitoringSystemGetDelayedStat() {
         final IMonitoringSystemHandler handler = new MonitoringSystemHandler();
-        MonitoringSystemEventDispatcher.sendRandomEventToMonitoring(2000, handler);
+        MonitoringSystemHelper.sendRandomEventToMonitoring(2000, handler);
 
         try {
             Thread.sleep(1000);
@@ -21,6 +27,12 @@ public class MonitoringSystemHandlerTest {
             Thread.currentThread().interrupt();
         }
 
-        handler.printStat();
+        final Map<MonitoringSystemEventType, Queue<Instant>> recentEvents = handler.getRecentEvents();
+        MonitoringSystemHelper.printMonitoringEvents(recentEvents);
+
+        for (int i = 0; i < MonitoringSystemEventType.values().length; i++) {
+            assertEquals(recentEvents.get(MonitoringSystemEventType.values()[i]).size(), 0);
+        }
+
     }
 }
