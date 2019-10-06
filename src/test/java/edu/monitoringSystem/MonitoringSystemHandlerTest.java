@@ -3,6 +3,8 @@ package edu.monitoringSystem;
 import org.junit.Test;
 
 import java.time.Instant;
+import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
@@ -12,27 +14,27 @@ public class MonitoringSystemHandlerTest {
     @Test
     public void monitoringSystemRun() {
         final IMonitoringSystemHandler handler = new MonitoringSystemHandler();
-        MonitoringSystemHelper.sendRandomEventToMonitoring(2000, handler);
+        MonitoringSystemHelper.sendRandomEventToMonitoring(20, 2000, handler);
         MonitoringSystemHelper.printMonitoringEvents(handler.getRecentEvents());
     }
 
     @Test
-    public void monitoringSystemGetDelayedStat() {
+    public void monitoringSystemGetDelayedStat() throws InterruptedException {
         final IMonitoringSystemHandler handler = new MonitoringSystemHandler();
-        MonitoringSystemHelper.sendRandomEventToMonitoring(2000, handler);
+        MonitoringSystemHelper.sendRandomEventToMonitoring(20, 2000, handler);
+        Thread.sleep(1000);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        final Map<MonitoringSystemEventType, Queue<Instant>> recentEvents = new EnumMap<>(MonitoringSystemEventType.class);
+
+        for (Map.Entry<MonitoringSystemEventType, Queue<Instant>> entry : handler.getRecentEvents().entrySet()) {
+            final Queue<Instant> queue = new LinkedList<>(entry.getValue());
+            recentEvents.put(entry.getKey(), queue);
         }
 
-        final Map<MonitoringSystemEventType, Queue<Instant>> recentEvents = handler.getRecentEvents();
         MonitoringSystemHelper.printMonitoringEvents(recentEvents);
 
         for (int i = 0; i < MonitoringSystemEventType.values().length; i++) {
             assertEquals(recentEvents.get(MonitoringSystemEventType.values()[i]).size(), 0);
         }
-
     }
 }

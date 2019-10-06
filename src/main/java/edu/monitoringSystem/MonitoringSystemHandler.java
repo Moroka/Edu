@@ -46,7 +46,7 @@ public class MonitoringSystemHandler implements IMonitoringSystemHandler {
     }
 
     private static void removeOutdatedEvents(MonitoringSystemEventType event, Queue<Instant> queue, Instant timestamp) {
-        while ((queue.size() > 0) && (Duration.between(queue.peek(), timestamp).toNanos() > NANOSECONDS_TIME_TO_KEEP.toNanos())) {
+        while ((queue.size() > 0) && (Duration.between(queue.peek(), timestamp).compareTo(NANOSECONDS_TIME_TO_KEEP) > 0)) {
             LOGGER.info("[{}] Remove event with timestamp: {}", event.name(), queue.peek().toEpochMilli());
             queue.remove();
         }

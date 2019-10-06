@@ -11,8 +11,8 @@ import java.util.Random;
 public class MonitoringSystemHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringSystemHelper.class);
 
-    public static void sendRandomEventToMonitoring(int count, IMonitoringSystemHandler monitoringInstance) {
-        final Random random = new Random();
+    public static void sendRandomEventToMonitoring(long seed, int count, IMonitoringSystemHandler monitoringInstance) {
+        final Random random = new Random(seed);
         for (int i = 0; i < count; i++) {
             final int eventType = random.nextInt(MonitoringSystemEventType.values().length);
             monitoringInstance.handleEvent(MonitoringSystemEventType.values()[eventType]);
