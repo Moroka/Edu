@@ -10,19 +10,40 @@ public class BmpUtilsTest {
 
     @Test
     public void colorTest() throws IOException {
-        BmpUtils bmpUtils = new BmpUtils("src/main/resources/BmpUtils/ColorTest.bmp");
-        bmpUtils.getHeaderInfo();
+        final Bmp bmp = new Bmp("src/main/resources/BmpUtils/ColorTest.bmp");
+        bmp.getHeaderInfo();
 
-        assertEquals(bmpUtils.getPixelInfo(0), "255 0 0");
-        assertEquals(bmpUtils.getPixelInfo(1), "0 255 0");
-        assertEquals(bmpUtils.getPixelInfo(2), "0 0 255");
-        assertEquals(bmpUtils.getPixelInfo(3), "255 255 255");
-        assertEquals(bmpUtils.getPixelInfo(4), "0 0 0");
+        assertEquals(bmp.getPixelInfo(0), "#ff0000");
+        assertEquals(bmp.getPixelInfo(1), "#00ff00");
+        assertEquals(bmp.getPixelInfo(2), "#0000ff");
+        assertEquals(bmp.getPixelInfo(3), "#ffffff");
+        assertEquals(bmp.getPixelInfo(4), "#000000");
     }
 
     @Test
     public void copyTest() throws IOException {
-        BmpUtils bmpUtils = new BmpUtils("src/main/resources/BmpUtils/ColorTest.bmp");
-        bmpUtils.getCopy("ColorTestCopy");
+        final Bmp bmp = new Bmp("src/main/resources/BmpUtils/ColorTest.bmp");
+        BmpUtils.copy("src/main/resources/BmpUtils/ColorTestCopy.bmp", bmp.getBytes());
+    }
+
+    @Test
+    public void toGrayScaleExceptRed() throws IOException {
+        final Bmp bmp = new Bmp("src/main/resources/BmpUtils/ToGrayScaleExceptRed.bmp");
+        BmpUtils.toGrayScaleExceptRed(bmp);
+    }
+
+    @Test
+    public void bmpDiff() throws IOException {
+        final Bmp firstBmp = new Bmp("src/main/resources/BmpUtils/BmpDiffFirst.bmp");
+        final Bmp secondBmp = new Bmp("src/main/resources/BmpUtils/BmpDiffSecond.bmp");
+
+        BmpUtils.bmpDiff(firstBmp, secondBmp);
+    }
+
+    @Test
+    public void generateRedBlueBitmap() throws IOException {
+        final Bmp source = new Bmp("src/main/resources/BmpUtils/Source.bmp");
+        BmpUtils.generateRedBlueBitmap(source, 10, 1);
     }
 }
+
