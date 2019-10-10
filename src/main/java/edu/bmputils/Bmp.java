@@ -12,10 +12,14 @@ public class Bmp {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Bmp.class);
     private final byte[] bitMapBytes;
+    private final int width;
+    private final int height;
 
     public Bmp(String path) throws IOException {
         bitMapBytes = Files.readAllBytes(Paths.get(path));
         checkBitmap();
+        width = intFromFourBytes(bitMapBytes, 18);
+        height = intFromFourBytes(bitMapBytes, 22);
     }
 
     public void getHeaderInfo() {
@@ -23,23 +27,37 @@ public class Bmp {
         LOGGER.info("ID field: {}{}", (char) bitMapBytes[0], (char) bitMapBytes[1]);
         LOGGER.info("Size of the BMP file: {}", intFromFourBytes(bitMapBytes, 2));
         LOGGER.info("Offset where the pixel array can be found: {}", intFromFourBytes(bitMapBytes, 10));
-        LOGGER.info("Width of the bitmap in pixels: {}", intFromFourBytes(bitMapBytes, 18));
-        LOGGER.info("Height of the bitmap in pixels: {}", intFromFourBytes(bitMapBytes, 22));
+        LOGGER.info("Width of the bitmap in pixels: {}", width);
+        LOGGER.info("Height of the bitmap in pixels: {}", height);
+        LOGGER.info("Number of planes: {}", intFromTwoBytes(bitMapBytes, 26));
         LOGGER.info("Number of bits per pixel: {}", intFromTwoBytes(bitMapBytes, 28));
         LOGGER.info("Compression used: {}", intFromFourBytes(bitMapBytes, 30));
+        LOGGER.info("Image size: {}", intFromFourBytes(bitMapBytes, 34));
     }
 
-    public String getPixelInfo(int pixelNumber) {
-        return String.format("#%02x%02x%02x", bitMapBytes[2 + HEADER_SIZE + pixelNumber * 3] & 0xFF,
-                bitMapBytes[1 + HEADER_SIZE + pixelNumber * 3] & 0xFF, bitMapBytes[HEADER_SIZE + pixelNumber * 3] & 0xFF);
-    }
-
-    public int getPixelCount() {
-        return intFromFourBytes(bitMapBytes, 18) * intFromFourBytes(bitMapBytes, 22);
+    public String getPixelInfo(int rowNumber, int position) {
+        return String.format("#%02x%02x%02x", bitMapBytes[2 + getPixelByteNumber(rowNumber, position)] & 0xFF,
+                bitMapBytes[1 + getPixelByteNumber(rowNumber, position)] & 0xFF, bitMapBytes[getPixelByteNumber(rowNumber, position)] & 0xFF);
     }
 
     public byte[] getBytes() {
         return bitMapBytes;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getRowSize() {
+        return (width * 3 % 4 == 0) ? width * 3 : (width * 3 - (width * 3 % 4) + 4);
+    }
+
+    public int getPixelByteNumber(int rowNumber, int position) {
+        return HEADER_SIZE + getRowSize() * rowNumber + position * 3;
     }
 
     private void checkBitmap() throws IOException {
