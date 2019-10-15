@@ -10,8 +10,8 @@ public class BmpUtilsTest {
 
     @Test
     public void colorTest() throws IOException {
-        final Bmp bmp = new BmpBuilder().build("src/main/resources/BmpUtils/ColorTest.bmp");
-        bmp.getHeaderInfo();
+        final Bmp bmp = Bmp.load("src/main/resources/BmpUtils/ColorTest.bmp");
+        bmp.printHeaderInfo();
         assertEquals(bmp.getPixelInfo(0, 0), "#ff0000");
         assertEquals(bmp.getPixelInfo(0, 1), "#00ff00");
         assertEquals(bmp.getPixelInfo(0, 2), "#0000ff");
@@ -21,34 +21,30 @@ public class BmpUtilsTest {
 
     @Test
     public void copyTest() throws IOException {
-        final Bmp bmp = new BmpBuilder().build("src/main/resources/BmpUtils/ColorTest.bmp");
-        BmpUtils.copy("src/main/resources/BmpUtils/ColorTestCopy.bmp", bmp.getBytes());
+        final Bmp bmp = Bmp.load("src/main/resources/BmpUtils/ColorTest.bmp");
+        bmp.saveAs("src/main/resources/BmpUtils/ColorTestCopy.bmp");
     }
 
     @Test
     public void toGrayScaleExceptRed() throws IOException {
-        final Bmp bmp = new BmpBuilder().build("src/main/resources/BmpUtils/ToGrayScaleExceptRed.bmp");
-        final byte[] resultBytes = BmpUtils.toGrayScaleExceptRed(bmp);
-        final String resultPath = "src/main/resources/BmpUtils/ToGrayScaleExceptRedCopy.bmp";
-        BmpUtils.copy(resultPath, resultBytes);
+        final Bmp bmp = Bmp.load("src/main/resources/BmpUtils/ToGrayScaleExceptRed.bmp");
+        final Bmp processedBmp = BmpUtils.toGrayScaleExceptRed(bmp);
+        processedBmp.saveAs("src/main/resources/BmpUtils/ToGrayScaleExceptRedCopy.bmp");
     }
 
     @Test
     public void bmpDiff() throws IOException {
-        final Bmp firstBmp = new BmpBuilder().build("src/main/resources/BmpUtils/BmpDiffFirst.bmp");
-        final Bmp secondBmp = new BmpBuilder().build("src/main/resources/BmpUtils/BmpDiffSecond.bmp");
-        final byte[] resultBytes = BmpUtils.bmpDiff(firstBmp, secondBmp);
-        final String resultPath = "src/main/resources/BmpUtils/BmpDiff.bmp";
-        BmpUtils.copy(resultPath, resultBytes);
+        final Bmp firstBmp = Bmp.load("src/main/resources/BmpUtils/BmpDiffFirst.bmp");
+        final Bmp secondBmp = Bmp.load("src/main/resources/BmpUtils/BmpDiffSecond.bmp");
+        final Bmp processedBmp = BmpUtils.bmpDiff(firstBmp, secondBmp);
+        processedBmp.saveAs("src/main/resources/BmpUtils/BmpDiff.bmp");
     }
 
     @Test
     public void generateRedBlueBitmap() throws IOException {
-        final byte[] resultBytes = BmpUtils.generateRedBlueBitmap("src/main/resources/BmpUtils/Source.bmp", 10, 10);
-        final String resultPath = "src/main/resources/BmpUtils/RedBlueBitmap.bmp";
-        BmpUtils.copy(resultPath, resultBytes);
-        final Bmp result = new BmpBuilder().build(resultPath);
-        result.getHeaderInfo();
+        final Bmp bmp = BmpUtils.generateRedBlueBitmap(10, 10);
+        bmp.printHeaderInfo();
+        bmp.saveAs("src/main/resources/BmpUtils/RedBlueBitmap.bmp");
     }
 }
 

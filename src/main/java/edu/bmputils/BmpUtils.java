@@ -4,20 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static edu.bmputils.Bmp.HEADER_SIZE;
 
 public class BmpUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(BmpUtils.class);
 
-    public static byte[] toGrayScaleExceptRed(Bmp bmp) {
+    public static Bmp toGrayScaleExceptRed(Bmp bmp) {
         for (int i = 0; i < bmp.getWidth(); i++) {
             for (int j = 0; j < bmp.getHeight(); j++) {
-                final int r = bmp.getBytes()[2 + bmp.getPixelByteNumber(i, j)] & 0xFF;
-                final int g = bmp.getBytes()[1 + bmp.getPixelByteNumber(i, j)] & 0xFF;
-                final int b = bmp.getBytes()[bmp.getPixelByteNumber(i, j)] & 0xFF;
+                final int r = bmp.getPixelColor(i, j)[0];
+                final int g = bmp.getPixelColor(i, j)[1];
+                final int b = bmp.getPixelColor(i, j)[2];
+
                 if (r <= g || r <= b) {
                     int average = (r + g + b) / 3;
                     bmp.setPixelColor(i, j, average, average, average);
@@ -26,10 +25,10 @@ public class BmpUtils {
                     LOGGER.debug("Pixel {} : {} {} {} does not meet the requirements", i, r, g, b);
             }
         }
-        return bmp.getBytes();
+        return bmp;
     }
 
-    public static byte[] bmpDiff(Bmp firstBmp, Bmp secondBmp) {
+    public static Bmp bmpDiff(Bmp firstBmp, Bmp secondBmp) {
         for (int i = 0; i < firstBmp.getWidth(); i++) {
             for (int j = 0; j < firstBmp.getHeight(); j++) {
                 if (firstBmp.getPixelInfo(i, j).equals(secondBmp.getPixelInfo(i, j))) {
@@ -40,23 +39,20 @@ public class BmpUtils {
                 }
             }
         }
-        return firstBmp.getBytes();
+        return firstBmp;
     }
 
-    public static byte[] generateRedBlueBitmap(String sourcePath, int width, int height) throws IOException {
+    public static Bmp generateRedBlueBitmap(int width, int height) throws IOException {
         final int bytesLength = HEADER_SIZE + getRowSize(width) * height;
-        Bmp bmp = new BmpBuilder().setWidth(width)
-                                  .setHeight(height)
-                                  .setBytesLength(bytesLength)
-                                  .build(sourcePath);
+        Bmp bmp = Bmp.createEmpty(width, height, bytesLength);
 
         // update header data
-        bmp.intToFourBytes(18, width);
-        bmp.intToFourBytes(22, height);
-        bmp.intToFourBytes(2, bytesLength);
-        bmp.intToFourBytes(34, getRowSize(width) * height);
+        bmp.setIntToFourBytes(18, width);
+        bmp.setIntToFourBytes(22, height);
+        bmp.setIntToFourBytes(2, bytesLength);
+        bmp.setIntToFourBytes(34, getRowSize(width) * height);
 
-        bmp.getHeaderInfo();
+        bmp.printHeaderInfo();
 
         int blueColor = 0;
         int redColor = 0;
@@ -68,15 +64,11 @@ public class BmpUtils {
                 blueColor = (j + 1 == width) ? 0 : blueColor + (255 / width);
             }
         }
-        return bmp.getBytes();
+        return bmp;
     }
 
     private static int getRowSize(int width) {
         final int a = width * 3;
         return (a % 4 == 0) ? a : (a - (a % 4) + 4);
-    }
-
-    public static void copy(String fileName, byte[] bytes) throws IOException {
-        Files.write(Paths.get(fileName), bytes);
     }
 }
