@@ -20,8 +20,9 @@ public class BmpUtils {
                 if (r <= g || r <= b) {
                     int average = (r + g + b) / 3;
                     bmp.setPixelColor(i, j, average, average, average);
-                    LOGGER.debug("Pixel {} : {} {} {} convert to: {} {} {}", i, r, g, b, average, average, average);
-                } else
+                    if (LOGGER.isDebugEnabled())
+                        LOGGER.debug("Pixel {} : {} {} {} convert to: {} {} {}", i, r, g, b, average, average, average);
+                } else if (LOGGER.isDebugEnabled())
                     LOGGER.debug("Pixel {} : {} {} {} does not meet the requirements", i, r, g, b);
             }
         }
@@ -32,10 +33,12 @@ public class BmpUtils {
         for (int i = 0; i < firstBmp.getWidth(); i++) {
             for (int j = 0; j < firstBmp.getHeight(); j++) {
                 if (firstBmp.getPixelInfo(i, j).equals(secondBmp.getPixelInfo(i, j))) {
-                    LOGGER.debug("{} are equals: {}", i, firstBmp.getPixelInfo(i, j));
+                    if (LOGGER.isDebugEnabled())
+                        LOGGER.debug("{} are equals: {}", i, firstBmp.getPixelInfo(i, j));
                 } else {
                     firstBmp.setPixelColor(i, j, 127, 127, 127);
-                    LOGGER.debug("Pixels at position {} are not equals: {} {}", i, firstBmp.getPixelInfo(i, j), secondBmp.getPixelInfo(i, j));
+                    if (LOGGER.isDebugEnabled())
+                        LOGGER.debug("Pixels at position {} are not equals: {} {}", i, firstBmp.getPixelInfo(i, j), secondBmp.getPixelInfo(i, j));
                 }
             }
         }
