@@ -9,15 +9,14 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class Bmp implements IBmp {
-    static final int HEADER_SIZE = 54;
-
+    private static final int HEADER_SIZE = 54;
     private static final Logger LOGGER = LoggerFactory.getLogger(Bmp.class);
     private final byte[] bitMapBytes;
     private final int width;
     private final int height;
 
-    private Bmp(byte[] bitMapBytes, int width, int height, int bytesLength) throws IOException {
-        this.bitMapBytes = (bytesLength == 0) ? bitMapBytes : Arrays.copyOf(bitMapBytes, bytesLength);
+    private Bmp(byte[] bitMapBytes, int width, int height) throws IOException {
+        this.bitMapBytes = bitMapBytes;
         this.width = (width == 0) ? intFromFourBytes(bitMapBytes, 18) : width;
         this.height = (height == 0) ? intFromFourBytes(bitMapBytes, 22) : height;
 
@@ -50,40 +49,26 @@ public class Bmp implements IBmp {
         return width;
     }
 
-    public void setPixelColor(int rowNumber, int position, int r, int g, int b) {
+    public void setPixelColor(int rowNumber, int position, Pixel pixel) {
         final int startByteNumber = getPixelByteNumber(rowNumber, position);
-        bitMapBytes[2 + startByteNumber] = (byte) r;
-        bitMapBytes[1 + startByteNumber] = (byte) g;
-        bitMapBytes[startByteNumber] = (byte) b;
-        LOGGER.debug("Paint pixel at position {}x{} to: {} {} {}", rowNumber, position, r, g, b);
+        bitMapBytes[2 + startByteNumber] = (byte) pixel.red;
+        bitMapBytes[1 + startByteNumber] = (byte) pixel.green;
+        bitMapBytes[startByteNumber] = (byte) pixel.blue;
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("Paint pixel at position {}x{} to: {} {} {}", rowNumber, position, pixel.red, pixel.green, pixel.blue);
     }
 
-    public int[] getPixelColor(int rowNumber, int position) {
-        final int[] arr = new int[3];
+    public Pixel getPixelColor(int rowNumber, int position) {
         final int startByteNumber = getPixelByteNumber(rowNumber, position);
-        arr[0] = bitMapBytes[2 + startByteNumber] & 0xFF;
-        arr[1] = bitMapBytes[1 + startByteNumber] & 0xFF;
-        arr[2] = bitMapBytes[startByteNumber] & 0xFF;
-        return arr;
-    }
-
-    public void setIntToFourBytes(int offset, int value) {
-        bitMapBytes[offset + 3] = ((byte) (value >> 24 & 0xFF));
-        bitMapBytes[offset + 2] = ((byte) (value >> 16 & 0xFF));
-        bitMapBytes[offset + 1] = ((byte) (value >> 8 & 0xFF));
-        bitMapBytes[offset] = ((byte) (value & 0xFF));
+        return new Pixel(bitMapBytes[2 + startByteNumber] & 0xFF, bitMapBytes[1 + startByteNumber] & 0xFF, bitMapBytes[startByteNumber] & 0xFF);
     }
 
     public void saveAs(String path) throws IOException {
         Files.write(Paths.get(path), bitMapBytes);
     }
 
-    private int getRowSize() {
-        return (width * 3 % 4 == 0) ? width * 3 : (width * 3 - (width * 3 % 4) + 4);
-    }
-
     private int getPixelByteNumber(int rowNumber, int position) {
-        return HEADER_SIZE + getRowSize() * rowNumber + position * 3;
+        return HEADER_SIZE + getRowSize(width) * rowNumber + position * 3;
     }
 
     private void checkBitmap() throws IOException {
@@ -100,11 +85,31 @@ public class Bmp implements IBmp {
         return (bytes[offset + 1] & 0xFF) << 8 | (bytes[offset] & 0xFF);
     }
 
-    public static Bmp load(String sourcePath) throws IOException {
-        return new Bmp(Files.readAllBytes(Paths.get(sourcePath)), 0, 0, 0);
+    private static void setIntToFourBytes(byte[] bytes, int offset, int value) {
+        bytes[offset + 3] = ((byte) (value >> 24 & 0xFF));
+        bytes[offset + 2] = ((byte) (value >> 16 & 0xFF));
+        bytes[offset + 1] = ((byte) (value >> 8 & 0xFF));
+        bytes[offset] = ((byte) (value & 0xFF));
     }
 
-    public static Bmp createEmpty(int width, int height, int bytesLength) throws IOException {
-        return new Bmp(Files.readAllBytes(Paths.get("src/main/resources/BmpUtils/Source.bmp")), width, height, bytesLength);
+    private static int getRowSize(int width) {
+        final int a = width * 3;
+        return (width * 3 % 4 == 0) ? width * 3 : (width * 3 - (width * 3 % 4) + 4);
+    }
+
+    public static Bmp load(String sourcePath) throws IOException {
+        return new Bmp(Files.readAllBytes(Paths.get(sourcePath)), 0, 0);
+    }
+
+    public static Bmp createEmpty(int width, int height) throws IOException {
+        final int bytesLength = HEADER_SIZE + getRowSize(width) * height;
+        byte[] bytes = Arrays.copyOf(Files.readAllBytes(Paths.get("src/main/resources/BmpUtils/Source.bmp")), bytesLength);
+        // update header data
+        Bmp.setIntToFourBytes(bytes, 18, width);
+        Bmp.setIntToFourBytes(bytes, 22, height);
+        Bmp.setIntToFourBytes(bytes, 2, bytesLength);
+        Bmp.setIntToFourBytes(bytes, 34, getRowSize(width) * height);
+
+        return new Bmp(bytes, width, height);
     }
 }
