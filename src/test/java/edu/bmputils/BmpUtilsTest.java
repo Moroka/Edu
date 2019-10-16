@@ -34,15 +34,15 @@ public class BmpUtilsTest {
 
     @Test
     public void bmpDiff() throws IOException {
-        final Bmp firstBmp = Bmp.load("src/main/resources/BmpUtils/BmpDiffFirst.bmp");
-        final Bmp secondBmp = Bmp.load("src/main/resources/BmpUtils/BmpDiffSecond.bmp");
+        final Bmp firstBmp = Bmp.load("src/main/resources/BmpUtils/Squirrel1.bmp");
+        final Bmp secondBmp = Bmp.load("src/main/resources/BmpUtils/Squirrel2.bmp");
         final Bmp processedBmp = BmpUtils.bmpDiff(firstBmp, secondBmp);
         processedBmp.saveAs("src/main/resources/BmpUtils/BmpDiff.bmp");
     }
 
     @Test
     public void generateRedBlueBitmap() throws IOException {
-        final Bmp bmp = BmpUtils.generateRedBlueBitmap(10, 10);
+        final Bmp bmp = BmpUtils.generateRedBlueBitmap(500, 500);
         bmp.printHeaderInfo();
         bmp.saveAs("src/main/resources/BmpUtils/RedBlueBitmap.bmp");
     }

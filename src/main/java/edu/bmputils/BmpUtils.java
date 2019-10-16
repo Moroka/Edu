@@ -26,6 +26,7 @@ public class BmpUtils {
     }
 
     public static Bmp bmpDiff(Bmp firstBmp, Bmp secondBmp) {
+        firstBmp.printHeaderInfo();
         for (int i = 0; i < firstBmp.getWidth(); i++) {
             for (int j = 0; j < firstBmp.getHeight(); j++) {
                 if (firstBmp.getPixelInfo(i, j).equals(secondBmp.getPixelInfo(i, j))) {
@@ -42,19 +43,18 @@ public class BmpUtils {
     }
 
     public static Bmp generateRedBlueBitmap(int width, int height) throws IOException {
-
         Bmp bmp = Bmp.createEmpty(width, height);
 
-        int blueColor = 0;
-        int redColor = 0;
-
         for (int i = 0; i < height; i++) {
-            redColor = (i + 1 == height) ? 255 : redColor + (255 / height);
             for (int j = 0; j < width; j++) {
-                bmp.setPixelColor(i, j, new Pixel(redColor, 0, blueColor));
-                blueColor = (j + 1 == width) ? 0 : blueColor + (255 / width);
+                bmp.setPixelColor(i, j, new Pixel(getColor(i, height), 0, getColor(j, width)));
             }
         }
         return bmp;
+    }
+
+    private static int getColor(int pos, int maxPos) {
+        float value = (pos / (float) maxPos) * 255;
+        return (int) value;
     }
 }

@@ -93,7 +93,6 @@ public class Bmp implements IBmp {
     }
 
     private static int getRowSize(int width) {
-        final int a = width * 3;
         return (width * 3 % 4 == 0) ? width * 3 : (width * 3 - (width * 3 % 4) + 4);
     }
 
