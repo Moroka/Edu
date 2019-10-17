@@ -28,7 +28,7 @@ public class BmpUtils {
     public static Bmp bmpDiff(Bmp firstBmp, Bmp secondBmp) {
         for (int i = 0; i < firstBmp.getWidth(); i++) {
             for (int j = 0; j < firstBmp.getHeight(); j++) {
-                if (firstBmp.getPixelInfo(i, j).equals(secondBmp.getPixelInfo(i, j))) {
+                if (firstBmp.getPixelColor(i, j).isEqual(secondBmp.getPixelColor(i, j))) {
                     if (LOGGER.isDebugEnabled())
                         LOGGER.debug("{} are equals: {}", i, firstBmp.getPixelInfo(i, j));
                 } else {
