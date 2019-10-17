@@ -10,4 +10,8 @@ public final class Pixel {
         this.green = green;
         this.blue = blue;
     }
+
+    public boolean isEqual(Pixel pixel) {
+        return (pixel.red == red && pixel.green == green && pixel.blue == blue);
+    }
 }
