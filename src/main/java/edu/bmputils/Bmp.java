@@ -36,7 +36,7 @@ public class Bmp implements IBmp {
         LOGGER.info("Image size: {}", intFromFourBytes(bitMapBytes, 34));
     }
 
-    public String getPixelInfo(int rowNumber, int position) {
+    public String getPixelInfo(int position, int rowNumber) {
         return String.format("#%02x%02x%02x", bitMapBytes[2 + getPixelByteNumber(rowNumber, position)] & 0xFF,
                 bitMapBytes[1 + getPixelByteNumber(rowNumber, position)] & 0xFF, bitMapBytes[getPixelByteNumber(rowNumber, position)] & 0xFF);
     }
@@ -49,7 +49,7 @@ public class Bmp implements IBmp {
         return width;
     }
 
-    public void setPixelColor(int rowNumber, int position, Pixel pixel) {
+    public void setPixelColor(int position, int rowNumber, Pixel pixel) {
         final int startByteNumber = getPixelByteNumber(rowNumber, position);
         bitMapBytes[2 + startByteNumber] = (byte) pixel.red;
         bitMapBytes[1 + startByteNumber] = (byte) pixel.green;
@@ -58,7 +58,7 @@ public class Bmp implements IBmp {
             LOGGER.debug("Paint pixel at position {}x{} to: {} {} {}", rowNumber, position, pixel.red, pixel.green, pixel.blue);
     }
 
-    public Pixel getPixelColor(int rowNumber, int position) {
+    public Pixel getPixelColor(int position, int rowNumber) {
         final int startByteNumber = getPixelByteNumber(rowNumber, position);
         return new Pixel(bitMapBytes[2 + startByteNumber] & 0xFF, bitMapBytes[1 + startByteNumber] & 0xFF, bitMapBytes[startByteNumber] & 0xFF);
     }
