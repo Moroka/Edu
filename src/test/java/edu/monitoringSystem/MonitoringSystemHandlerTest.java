@@ -2,39 +2,58 @@ package edu.monitoringSystem;
 
 import org.junit.Test;
 
-import java.time.Instant;
-import java.util.EnumMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
 public class MonitoringSystemHandlerTest {
     @Test
-    public void monitoringSystemRun() {
-        final IMonitoringSystemHandler handler = new MonitoringSystemHandler();
-        MonitoringSystemHelper.sendRandomEventToMonitoring(20, 2000, handler);
+    public void eventsAreArrived() {
+        // Send events into time window, check that everyone has arrived
+        final CustomClock clock = new CustomClock();
+        final IMonitoringSystemHandler handler = new MonitoringSystemHandler(clock);
+        final int eventsCount = 100;
+        final Random random = new Random(20);
+        MonitoringSystemHelper.sendRandomEventToMonitoring(random, eventsCount, handler, clock, MonitoringSystemHandler.MILLIS_TIME_TO_KEEP.toMillis());
         MonitoringSystemHelper.printMonitoringEvents(handler.getRecentEvents());
+
+        int arrivedEventsCount = 0;
+        for (int i = 0; i < MonitoringSystemEventType.values().length; i++) {
+            arrivedEventsCount += handler.getRecentEvents().get(MonitoringSystemEventType.values()[i]).size();
+        }
+        assertEquals(eventsCount, arrivedEventsCount);
     }
 
     @Test
-    public void monitoringSystemGetDelayedStat() throws InterruptedException {
-        final IMonitoringSystemHandler handler = new MonitoringSystemHandler();
-        MonitoringSystemHelper.sendRandomEventToMonitoring(20, 2000, handler);
-        Thread.sleep(1000);
-
-        final Map<MonitoringSystemEventType, Queue<Instant>> recentEvents = new EnumMap<>(MonitoringSystemEventType.class);
-
-        for (Map.Entry<MonitoringSystemEventType, Queue<Instant>> entry : handler.getRecentEvents().entrySet()) {
-            final Queue<Instant> queue = new LinkedList<>(entry.getValue());
-            recentEvents.put(entry.getKey(), queue);
-        }
-
-        MonitoringSystemHelper.printMonitoringEvents(recentEvents);
+    public void eventsAreNotArrived() {
+        // Send events into time window(MILLIS_TIME_TO_KEEP), modify instant at handler, check that no one has arrived
+        final CustomClock clock = new CustomClock();
+        final IMonitoringSystemHandler handler = new MonitoringSystemHandler(clock);
+        final Random random = new Random(20);
+        MonitoringSystemHelper.sendRandomEventToMonitoring(random, 100, handler, clock, MonitoringSystemHandler.MILLIS_TIME_TO_KEEP.toMillis());
+        handler.shiftInstantMs(1000);
+        MonitoringSystemHelper.printMonitoringEvents(handler.getRecentEvents());
 
         for (int i = 0; i < MonitoringSystemEventType.values().length; i++) {
-            assertEquals(recentEvents.get(MonitoringSystemEventType.values()[i]).size(), 0);
+            assertEquals(handler.getRecentEvents().get(MonitoringSystemEventType.values()[i]).size(), 0);
         }
+    }
+
+    @Test
+    public void onlyHalfEventsAreArrived() {
+        // Send half events into time window(MILLIS_TIME_TO_KEEP), send second part of events into time(MILLIS_TIME_TO_KEEP), check that only half has arrived
+        final CustomClock clock = new CustomClock();
+        final IMonitoringSystemHandler handler = new MonitoringSystemHandler(clock);
+        final Random random = new Random(20);
+        final int eventsCount = 200;
+        MonitoringSystemHelper.sendRandomEventToMonitoring(random, eventsCount / 2, handler, clock, MonitoringSystemHandler.MILLIS_TIME_TO_KEEP.toMillis());
+        MonitoringSystemHelper.sendRandomEventToMonitoring(random, eventsCount / 2, handler, clock, MonitoringSystemHandler.MILLIS_TIME_TO_KEEP.toMillis());
+        MonitoringSystemHelper.printMonitoringEvents(handler.getRecentEvents());
+
+        int arrivedEventsCount = 0;
+        for (int i = 0; i < MonitoringSystemEventType.values().length; i++) {
+            arrivedEventsCount += handler.getRecentEvents().get(MonitoringSystemEventType.values()[i]).size();
+        }
+        assertEquals(eventsCount / 2, arrivedEventsCount);
     }
 }
