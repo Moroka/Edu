@@ -1,8 +1,10 @@
 package edu.monitoringSystem;
 
+import usefulutils.customclock.CustomClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Queue;
@@ -11,17 +13,17 @@ import java.util.Random;
 public class MonitoringSystemHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringSystemHelper.class);
 
-    public static void sendRandomEventToMonitoring(Random random, int count, IMonitoringSystemHandler monitoringInstance, CustomClock clock, long execTime) {
+    public static void sendRandomEventToMonitoring(Random random, int count, IMonitoringSystemHandler monitoringInstance, CustomClock clock, Duration execTime) {
         for (int i = 0; i < count; i++) {
             final int eventType = random.nextInt(MonitoringSystemEventType.values().length);
             monitoringInstance.handleEvent(MonitoringSystemEventType.values()[eventType]);
-            clock.shiftInstantMs(execTime / count);
+            clock.shiftInstant(execTime.dividedBy(count));
         }
     }
 
     public static void printMonitoringEvents(Map<MonitoringSystemEventType, Queue<Instant>> recentEvents) {
         LOGGER.info("----------------------------------");
-        LOGGER.info("Statistics for last {} nanoseconds:", MonitoringSystemHandler.MILLIS_TIME_TO_KEEP.toMillis());
+        LOGGER.info("Remaining events :");
         for (Map.Entry<MonitoringSystemEventType, Queue<Instant>> entry : recentEvents.entrySet()) {
             LOGGER.info("[{}] Events count: {}", entry.getKey(), entry.getValue().size());
         }

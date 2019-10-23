@@ -3,6 +3,7 @@ package edu.monitoringSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.EnumMap;
@@ -11,13 +12,15 @@ import java.util.Map;
 import java.util.Queue;
 
 public class MonitoringSystemHandler implements IMonitoringSystemHandler {
-    static final Duration MILLIS_TIME_TO_KEEP = Duration.ofMillis(1000);
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringSystemHandler.class);
+    private final Duration timeToKeep;
     private final Map<MonitoringSystemEventType, Queue<Instant>> hashMap = new EnumMap<>(MonitoringSystemEventType.class);
-    private final CustomClock clock;
+    private final Clock clock;
 
-    public MonitoringSystemHandler(CustomClock clock) {
+    public MonitoringSystemHandler(Clock clock, Duration timeToKeep) {
         this.clock = clock;
+        this.timeToKeep = timeToKeep;
+
         createEventsMaps();
     }
 
@@ -45,24 +48,20 @@ public class MonitoringSystemHandler implements IMonitoringSystemHandler {
         return recentEvents;
     }
 
-    public void shiftInstantMs(long value) {
-        clock.shiftInstantMs(value);
-    }
-
     private void createEventsMaps() {
         for (int i = 0; i < MonitoringSystemEventType.values().length; i++) {
             hashMap.put(MonitoringSystemEventType.values()[i], new LinkedList<>());
         }
     }
 
-    private static void removeOutdatedEvents(MonitoringSystemEventType event, Queue<Instant> queue, Instant timestamp) {
-        while ((queue.size() > 0) && (Duration.between(queue.peek(), timestamp).compareTo(MILLIS_TIME_TO_KEEP) > 0)) {
+    private void removeOutdatedEvents(MonitoringSystemEventType event, Queue<Instant> queue, Instant timestamp) {
+        while ((queue.size() > 0) && (Duration.between(queue.peek(), timestamp).compareTo(timeToKeep) > 0)) {
             LOGGER.info("[{}] Remove event with timestamp: {}", event.name(), queue.peek());
             queue.remove();
         }
     }
 
-    private static void addEvent(MonitoringSystemEventType event, Queue<Instant> queue, Instant timestamp) {
+    private void addEvent(MonitoringSystemEventType event, Queue<Instant> queue, Instant timestamp) {
         queue.add(timestamp);
         LOGGER.info("[{}] Add event with timestamp: {}", event.name(), timestamp);
     }

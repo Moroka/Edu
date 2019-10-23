@@ -1,6 +1,7 @@
-package edu.monitoringSystem;
+package usefulutils.customclock;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -10,12 +11,12 @@ public class CustomClock extends Clock {
 
     @Override
     public ZoneId getZone() {
-        return null;
+        return ZoneId.of("Europe/Moscow");
     }
 
     @Override
     public Clock withZone(ZoneId zone) {
-        return null;
+        return this;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class CustomClock extends Clock {
         return instant;
     }
 
-    public void shiftInstantMs(long value) {
-        instant = instant.plus(value, ChronoUnit.MILLIS);
+    public void shiftInstant(Duration value) {
+        instant = instant.plus(value.toMillis(), ChronoUnit.MILLIS);
     }
 }
