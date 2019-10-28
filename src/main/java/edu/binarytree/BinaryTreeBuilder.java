@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 final class BinaryTreeBuilder {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeBuilder.class);
     private final String str;
     private int strIndex;
 
