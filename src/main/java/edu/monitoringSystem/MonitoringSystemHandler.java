@@ -13,6 +13,7 @@ import java.util.Queue;
 
 public class MonitoringSystemHandler implements IMonitoringSystemHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringSystemHandler.class);
+
     private final Duration timeToKeep;
     private final Map<MonitoringSystemEventType, Queue<Instant>> hashMap = new EnumMap<>(MonitoringSystemEventType.class);
     private final Clock clock;
@@ -46,6 +47,10 @@ public class MonitoringSystemHandler implements IMonitoringSystemHandler {
         }
 
         return recentEvents;
+    }
+
+    public Duration getTimeToKeep() {
+        return timeToKeep;
     }
 
     private void createEventsMaps() {

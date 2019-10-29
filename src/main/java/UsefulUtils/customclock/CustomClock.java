@@ -4,7 +4,6 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 
 public class CustomClock extends Clock {
     private Instant instant = Instant.MIN;
@@ -25,6 +24,6 @@ public class CustomClock extends Clock {
     }
 
     public void shiftInstant(Duration value) {
-        instant = instant.plus(value.toMillis(), ChronoUnit.MILLIS);
+        instant = instant.plus(value);
     }
 }

@@ -1,8 +1,8 @@
 package edu.monitoringSystem;
 
-import usefulutils.customclock.CustomClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import usefulutils.customclock.CustomClock;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -21,10 +21,10 @@ public class MonitoringSystemHelper {
         }
     }
 
-    public static void printMonitoringEvents(Map<MonitoringSystemEventType, Queue<Instant>> recentEvents) {
+    public static void printMonitoringEvents(IMonitoringSystemHandler monitoringInstance) {
+        LOGGER.info("Statistics for last {} milliseconds:", monitoringInstance.getTimeToKeep().toMillis());
         LOGGER.info("----------------------------------");
-        LOGGER.info("Remaining events :");
-        for (Map.Entry<MonitoringSystemEventType, Queue<Instant>> entry : recentEvents.entrySet()) {
+        for (Map.Entry<MonitoringSystemEventType, Queue<Instant>> entry : monitoringInstance.getRecentEvents().entrySet()) {
             LOGGER.info("[{}] Events count: {}", entry.getKey(), entry.getValue().size());
         }
     }
