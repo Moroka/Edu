@@ -126,18 +126,18 @@ public final class BinaryTreeTest {
         final BinaryTreeNode node = tree.createTree();
 
         final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
-        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[0]), "bc__d__");
-        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[1]), "cd__b__");
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[0]), "d__");
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[1]), "d__");
     }
 
     @Test
     public void hasSameCharSetTreesTest3() {
         /*
                   a
-             c          k
+             c          b
            d   b      c   d
         */
-        final String inputString = "acd__b__kc__d__";
+        final String inputString = "acd__b__bc__d__";
         final BinaryTreeBuilder tree = new BinaryTreeBuilder(inputString);
         final BinaryTreeNode node = tree.createTree();
 
@@ -159,8 +159,8 @@ public final class BinaryTreeTest {
         final BinaryTreeNode node = tree.createTree();
 
         final BinaryTreeNode[] foundedNodes = BinaryTreeHelper.hasSameCharSet(node);
-        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[0]), "dz__x__");
-        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[1]), "dx__z__");
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[0]), "z__");
+        assertEquals(BinaryTreeHelper.treeToString(foundedNodes[1]), "z__");
     }
 
     @Test

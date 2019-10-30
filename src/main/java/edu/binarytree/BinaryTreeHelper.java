@@ -5,11 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public final class BinaryTreeHelper {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeBuilder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeHelper.class);
 
     /**
      * Tree to string
@@ -101,41 +100,49 @@ public final class BinaryTreeHelper {
      */
 
     public static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode tree) {
-        return hasSameCharSet(tree, new HashMap<>(), new BinaryTreeNode[2]);
+        return hasSameCharSet(tree, new HashMap<>(), new int[2], false);
     }
 
-    private static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode node, HashMap<Integer, BinaryTreeNode> storage, BinaryTreeNode[] result) {
+    private static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode node, HashMap<Integer, BinaryTreeNode> storage, int[] lastIds, boolean isLeft) {
+        if (node == null)
+            return new BinaryTreeNode[2];
+
+        BinaryTreeNode[] result = new BinaryTreeNode[2];
+
         if (node.getLeftNode() != null) {
-            result = hasSameCharSet(node.getLeftNode(), storage, result);
+            result = hasSameCharSet(node.getLeftNode(), storage, lastIds, true);
             if (result[0] != null)
                 return result;
         }
         if (node.getRightNode() != null) {
-            result = hasSameCharSet(node.getRightNode(), storage, result);
+            result = hasSameCharSet(node.getRightNode(), storage, lastIds, false);
             if (result[0] != null)
                 return result;
         }
 
         LOGGER.info(":::::::::::: Processing node: {}", node.getValue());
+
         int id = modifyBinaryRepresentation(node.getValue(), 0);
         LOGGER.info("Node raw binary value: {}", Integer.toBinaryString(id));
-        if (node.getLeftNode() != null && node.getRightNode() == null) {
-            LOGGER.info("Left node '{}' id: {}", node.getLeftNode().getValue(), Integer.toBinaryString(getIdByNode(storage, node.getLeftNode())));
-            id = modifyBinaryRepresentation(node.getValue(), getIdByNode(storage, node.getLeftNode()));
-        }
-        if (node.getRightNode() != null && node.getLeftNode() == null) {
-            LOGGER.info("Right node '{}' id: {}", node.getRightNode().getValue(), Integer.toBinaryString(getIdByNode(storage, node.getRightNode())));
-            id = modifyBinaryRepresentation(node.getValue(), getIdByNode(storage, node.getRightNode()));
-        }
-        if (node.getLeftNode() != null && node.getRightNode() != null) {
-            LOGGER.info("Left node '{}' id: {}", node.getLeftNode().getValue(), Integer.toBinaryString(getIdByNode(storage, node.getLeftNode())));
-            final int leftNodeId = getIdByNode(storage, node.getLeftNode());
 
-            LOGGER.info("Right node '{}' id: {}", node.getRightNode().getValue(), Integer.toBinaryString(getIdByNode(storage, node.getRightNode())));
-            final int rightNodeId = getIdByNode(storage, node.getRightNode());
+        if (node.getLeftNode() != null) {
+            final int leftNodeId = modifyBinaryRepresentation(node.getValue(), lastIds[0]);
+            id = id | leftNodeId;
+        }
 
-            id = modifyBinaryRepresentation(node.getValue(), (leftNodeId | rightNodeId));
-            LOGGER.info("New node id after merge: {}", Integer.toBinaryString(id));
+        if (node.getRightNode() != null) {
+            final int rightNodeId = modifyBinaryRepresentation(node.getValue(), lastIds[1]);
+            id = id | rightNodeId;
+        }
+
+        LOGGER.info("New node id after merge: {}", Integer.toBinaryString(id));
+
+        if (isLeft) {
+            LOGGER.info("Update saved left node value: {}.", Integer.toBinaryString(id));
+            lastIds[0] = id;
+        } else {
+            LOGGER.info("Update saved right node value: {}.", Integer.toBinaryString(id));
+            lastIds[1] = id;
         }
 
         final BinaryTreeNode value = storage.get(id);
@@ -150,14 +157,6 @@ public final class BinaryTreeHelper {
         }
 
         return new BinaryTreeNode[2];
-    }
-
-
-    private static int getIdByNode(HashMap<Integer, BinaryTreeNode> map, BinaryTreeNode node) {
-        for (Map.Entry<Integer, BinaryTreeNode> entry : map.entrySet())
-            if (entry.getValue() == node)
-                return entry.getKey();
-        return -1;
     }
 
     private static int modifyBinaryRepresentation(char c, int binaryRepresentation) {
