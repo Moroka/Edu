@@ -1,15 +1,9 @@
 package edu.binarytree;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public final class BinaryTreeHelper {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BinaryTreeHelper.class);
-
     /**
      * Tree to string
      */
@@ -100,48 +94,7 @@ public final class BinaryTreeHelper {
      */
 
     public static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode tree) {
-        final BinaryTreeNode[] result = new BinaryTreeNode[2];
-        hasSameCharSet(tree, new HashMap<>(), result);
-        return result;
-    }
-
-    private static int hasSameCharSet(BinaryTreeNode node, HashMap<Integer, BinaryTreeNode> storage, BinaryTreeNode[] result) {
-        if (result[0] != null)
-            return -1;
-        if (node == null)
-            return 0;
-
-        final int leftId = hasSameCharSet(node.getLeftNode(), storage, result);
-        if (result[0] != null)
-            return -1;
-        final int rightId = hasSameCharSet(node.getRightNode(), storage, result);
-        if (result[0] != null)
-            return -1;
-
-        LOGGER.info(":::::::::::: Processing node: {}", node.getValue());
-
-        int id = modifyBinaryRepresentation(node.getValue(), 0);
-        LOGGER.info("Node raw binary value: {}", Integer.toBinaryString(id));
-        LOGGER.info("Left id: {}.", Integer.toBinaryString(leftId));
-        LOGGER.info("Right id: {}.", Integer.toBinaryString(rightId));
-        id = id | leftId | rightId;
-        LOGGER.info("New node id after merging sub-nodes: {}", Integer.toBinaryString(id));
-
-        final BinaryTreeNode value = storage.get(id);
-        if (value == null) {
-            LOGGER.info("Add node '{}' to storage with id: {}", node.getValue(), Integer.toBinaryString(id));
-            storage.put(id, node);
-        } else {
-            LOGGER.info("Finding nodes with equal ids: {} {}", node.getValue(), value.getValue());
-            result[0] = node;
-            result[1] = value;
-        }
-
-        return id;
-    }
-
-    private static int modifyBinaryRepresentation(char c, int binaryRepresentation) {
-        final int mask = 1 << (c - 'a');
-        return binaryRepresentation | mask;
+        final BinaryTreeCharStorage charStorage = new BinaryTreeCharStorage(tree);
+        return charStorage.sameCharSet();
     }
 }
