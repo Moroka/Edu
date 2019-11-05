@@ -100,50 +100,32 @@ public final class BinaryTreeHelper {
      */
 
     public static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode tree) {
-        return hasSameCharSet(tree, new HashMap<>(), new int[2], false);
+        final BinaryTreeNode[] result = new BinaryTreeNode[2];
+        hasSameCharSet(tree, new HashMap<>(), result);
+        return result;
     }
 
-    private static BinaryTreeNode[] hasSameCharSet(BinaryTreeNode node, HashMap<Integer, BinaryTreeNode> storage, int[] lastIds, boolean isLeft) {
+    private static int hasSameCharSet(BinaryTreeNode node, HashMap<Integer, BinaryTreeNode> storage, BinaryTreeNode[] result) {
+        if (result[0] != null)
+            return -1;
         if (node == null)
-            return new BinaryTreeNode[2];
+            return 0;
 
-        BinaryTreeNode[] result = new BinaryTreeNode[2];
-
-        if (node.getLeftNode() != null) {
-            result = hasSameCharSet(node.getLeftNode(), storage, lastIds, true);
-            if (result[0] != null)
-                return result;
-        }
-        if (node.getRightNode() != null) {
-            result = hasSameCharSet(node.getRightNode(), storage, lastIds, false);
-            if (result[0] != null)
-                return result;
-        }
+        final int leftId = hasSameCharSet(node.getLeftNode(), storage, result);
+        if (result[0] != null)
+            return -1;
+        final int rightId = hasSameCharSet(node.getRightNode(), storage, result);
+        if (result[0] != null)
+            return -1;
 
         LOGGER.info(":::::::::::: Processing node: {}", node.getValue());
 
         int id = modifyBinaryRepresentation(node.getValue(), 0);
         LOGGER.info("Node raw binary value: {}", Integer.toBinaryString(id));
-
-        if (node.getLeftNode() != null) {
-            final int leftNodeId = modifyBinaryRepresentation(node.getValue(), lastIds[0]);
-            id = id | leftNodeId;
-        }
-
-        if (node.getRightNode() != null) {
-            final int rightNodeId = modifyBinaryRepresentation(node.getValue(), lastIds[1]);
-            id = id | rightNodeId;
-        }
-
-        LOGGER.info("New node id after merge: {}", Integer.toBinaryString(id));
-
-        if (isLeft) {
-            LOGGER.info("Update saved left node value: {}.", Integer.toBinaryString(id));
-            lastIds[0] = id;
-        } else {
-            LOGGER.info("Update saved right node value: {}.", Integer.toBinaryString(id));
-            lastIds[1] = id;
-        }
+        LOGGER.info("Left id: {}.", Integer.toBinaryString(leftId));
+        LOGGER.info("Right id: {}.", Integer.toBinaryString(rightId));
+        id = id | leftId | rightId;
+        LOGGER.info("New node id after merging sub-nodes: {}", Integer.toBinaryString(id));
 
         final BinaryTreeNode value = storage.get(id);
         if (value == null) {
@@ -153,10 +135,9 @@ public final class BinaryTreeHelper {
             LOGGER.info("Finding nodes with equal ids: {} {}", node.getValue(), value.getValue());
             result[0] = node;
             result[1] = value;
-            return result;
         }
 
-        return new BinaryTreeNode[2];
+        return id;
     }
 
     private static int modifyBinaryRepresentation(char c, int binaryRepresentation) {
