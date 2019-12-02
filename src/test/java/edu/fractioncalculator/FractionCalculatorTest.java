@@ -8,22 +8,22 @@ public class FractionCalculatorTest {
     // Infix to postfix tests
     @Test
     public void infixToPostfixSimpleTest() {
-        assertEquals(FractionCalculator.infixToPostfix("5+3"), "53+");
-        assertEquals(FractionCalculator.infixToPostfix("53-3"), "53-");
-        assertEquals(FractionCalculator.infixToPostfix("3*3"), "53*");
-        assertEquals(FractionCalculator.infixToPostfix("3/3"), "53/");
+        assertEquals(FractionCalculator.infixToPostfix("5+3"), "5 3 +");
+        assertEquals(FractionCalculator.infixToPostfix("53-3"), "53 3 -");
+        assertEquals(FractionCalculator.infixToPostfix("3*3"), "3 3 *");
+        assertEquals(FractionCalculator.infixToPostfix("3/3"), "3 3 /");
     }
 
     @Test
     public void infixToPostfixWhiteSpaceTest() {
-        assertEquals(FractionCalculator.infixToPostfix("5 +3 "), "53+");
-        assertEquals(FractionCalculator.infixToPostfix("        5   +      3 "), "53+");
-        assertEquals(FractionCalculator.infixToPostfix("  5 + 3 "), "53+");
+        assertEquals(FractionCalculator.infixToPostfix("5 +3 "), "5 3 +");
+        assertEquals(FractionCalculator.infixToPostfix("        5   +      3 "), "5 3 +");
+        assertEquals(FractionCalculator.infixToPostfix("  5 + 3 "), "5 3 +");
     }
 
     @Test
     public void infixToPostfixSameNumbersTest() {
-        assertEquals(FractionCalculator.infixToPostfix("53"), "53");
+        assertEquals(FractionCalculator.infixToPostfix("53"), "53 ");
     }
 
     @Test
@@ -32,9 +32,9 @@ public class FractionCalculatorTest {
     }
 
     @Test
-    public void infixToPostfixLongExpressionTest() {
-        assertEquals(FractionCalculator.infixToPostfix("5 -4 +6 -3 -1- 0 +8"), "54-6+3-1-0-8+");
-        assertEquals(FractionCalculator.infixToPostfix("5 *6 /3 -2 +1+ 71 +13"), "56*3/2-1+71+13+");
+    public void infixToPostfixMediumExpressionTest() {
+        assertEquals(FractionCalculator.infixToPostfix("5-4+6-3*2"), "5 4 -6 +3 2 *-");
+        assertEquals(FractionCalculator.infixToPostfix("5 *6 /3 -2"), "5 6 *3 /2 -");
     }
 
     @Test
@@ -46,28 +46,22 @@ public class FractionCalculatorTest {
 
     @Test
     public void infixToPostfixTooMuchOperationSymbolsTest() {
-        //TODO idk
-//        assertEquals(FractionCalculator.infixToPostfix("5++6"), "54-6+3-1-0-8+");
-    }
-
-    @Test
-    public void infixToPostfixDividedByZeroTest() {
-        //TODO (can easy fix at calculate expression)
-        assertEquals(FractionCalculator.infixToPostfix("5/0"), "50/");
+        //TODO idk (mb check next symbol != operation.symbol)
+//        assertEquals(FractionCalculator.infixToPostfix("5++6"), "Wrong input");
     }
 
     @Test
     public void infixToPostfixSimpleBracketsTest() {
-        assertEquals(FractionCalculator.infixToPostfix("(5)"), "5");
-        assertEquals(FractionCalculator.infixToPostfix("((5))"), "5");
-        assertEquals(FractionCalculator.infixToPostfix("(((5)))"), "5");
-        assertEquals(FractionCalculator.infixToPostfix("(2) + (1)"), "21+");
-        assertEquals(FractionCalculator.infixToPostfix("(2+2) + (3+3)"), "22+33++");
+        assertEquals(FractionCalculator.infixToPostfix("(5)"), "5 ");
+        assertEquals(FractionCalculator.infixToPostfix("((5))"), "5 ");
+        assertEquals(FractionCalculator.infixToPostfix("(((5)))"), "5 ");
+        assertEquals(FractionCalculator.infixToPostfix("(2) + (1)"), "2 1 +");
+        assertEquals(FractionCalculator.infixToPostfix("(2+2) + (3+3)"), "2 2 +3 3 ++");
     }
 
     @Test
     public void infixToPostfixBracketsTest() {
-        assertEquals(FractionCalculator.infixToPostfix("(1 + 5*3 - 8 + 1 * 9)"), "153*+8-19*+");
+        assertEquals(FractionCalculator.infixToPostfix("(1 + 5)"), "1 5 +");
     }
 
     @Test
