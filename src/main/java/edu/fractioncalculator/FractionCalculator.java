@@ -11,20 +11,20 @@ public final class FractionCalculator {
     public static String calculateExpression(String expression) {
         expression = infixToPostfix(expression);
         LOGGER.info("=====================================");
-        Stack<Integer> stack = new Stack<>();
+        final Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
             LOGGER.info("> Parse char {} at expression", c);
             if (c == ' ')
                 continue;
             if (Character.isDigit(c)) {
-                String multipleCharsValue = getMultipleCharsValue(expression.substring(i));
+                final String multipleCharsValue = getMultipleCharsValue(expression.substring(i));
                 stack.push(Integer.valueOf(multipleCharsValue));
                 i += multipleCharsValue.length() - 1;
                 LOGGER.info("> Push to stack: {}", c);
             } else {
-                int operand2 = stack.pop();
-                int operand1 = stack.empty() ? 0 : stack.pop();
+                final int operand2 = stack.pop();
+                final int operand1 = stack.empty() ? 0 : stack.pop();
                 if (c == '*') {
                     stack.push(operand1 * operand2);
                 } else if (c == '/') {
@@ -43,26 +43,29 @@ public final class FractionCalculator {
         expression = expression.replaceAll("\\s+", "");
         LOGGER.info("Infix expression: {}", expression);
 
-        StringBuilder result = new StringBuilder();
-        Stack<Character> operationSymbols = new Stack<>();
+        final int expressionLength = expression.length();
+        if (expressionLength == 0)
+            return "Wrong input(empty expression)";
 
-        for (int i = 0; i < expression.length(); ++i) {
-            char c = expression.charAt(i);
+        final StringBuilder result = new StringBuilder();
+        final Stack<Character> operationSymbols = new Stack<>();
+
+        for (int i = 0; i < expressionLength; ++i) {
+            final char c = expression.charAt(i);
             LOGGER.info("> Parse char {} at expression", c);
             if (Character.isLetter(c)) {
                 LOGGER.info("Infix expression contains letters: {}", expression);
                 return "Wrong input(only digits supported)";
             }
             if (Character.isDigit(c)) {
-                String multipleCharsValue = getMultipleCharsValue(expression.substring(i));
+                final String multipleCharsValue = getMultipleCharsValue(expression.substring(i));
                 result.append(multipleCharsValue);
                 result.append(" ");
                 LOGGER.info("Add string '{} ' to result", multipleCharsValue);
                 i += multipleCharsValue.length() - 1;
             } else if (c == '(') {
                 operationSymbols.push(c);
-            }
-            else if (c == ')') {
+            } else if (c == ')') {
                 while (!operationSymbols.isEmpty() && operationSymbols.peek() != '(')
                     result.append(operationSymbols.pop());
                 if (!operationSymbols.isEmpty() && operationSymbols.peek() != '(')
@@ -70,6 +73,9 @@ public final class FractionCalculator {
                 else
                     operationSymbols.pop();
             } else {
+                if (operationPriority(c) == -1) {
+                    return "Wrong input(only digits supported)";
+                }
                 while (!operationSymbols.isEmpty() && operationPriority(c) <= operationPriority(operationSymbols.peek())) {
                     if (operationSymbols.peek() == '(')
                         return "Wrong input";
