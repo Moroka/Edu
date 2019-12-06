@@ -28,6 +28,8 @@ public final class FractionCalculator {
                 if (c == '*') {
                     stack.push(operand1 * operand2);
                 } else if (c == '/') {
+                    if (operand2 == 0)
+                        throw new ArithmeticException("Division by zero");
                     stack.push(operand1 / operand2);
                 } else if (c == '+') {
                     stack.push(operand1 + operand2);

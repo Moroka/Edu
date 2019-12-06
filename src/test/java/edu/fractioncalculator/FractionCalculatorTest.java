@@ -96,9 +96,8 @@ public class FractionCalculatorTest {
         assertEquals(FractionCalculator.calculateExpression("5 *6 /3 -2 +1+ 71 +13"), "93");
     }
 
-    @Test
+    @Test(expected = ArithmeticException.class)
     public void calculateExpressionDividedByZeroTest() {
-        //TODO (ArithmeticException: / by zero)
-//        assertEquals(FractionCalculator.calculateExpression("5/0"), "50/");
+        assertEquals(FractionCalculator.calculateExpression("5/0"), "50/");
     }
 }
