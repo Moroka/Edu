@@ -43,10 +43,9 @@ public class FractionCalculatorTest {
         assertEquals(FractionCalculator.infixToPostfix("5 % 2"), "Wrong input(only digits supported)");
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void infixToPostfixTooMuchOperationSymbolsTest() {
-        //TODO idk (mb check next symbol != operation.symbol)
-//        assertEquals(FractionCalculator.infixToPostfix("5++6"), "Wrong input");
+        assertEquals(FractionCalculator.infixToPostfix("5++6"), "Repetitive operation symbols");
     }
 
     @Test

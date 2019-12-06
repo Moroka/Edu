@@ -75,12 +75,14 @@ public final class FractionCalculator {
                         throw new UnsupportedOperationException("Unbalanced brackets");
 
             } else {
+                if (i != expressionLength -1 && (operationPriority(expression.charAt(i + 1)) > -1))
+                    throw new UnsupportedOperationException("Repetitive operation symbols");
                 if (operationPriority(c) == -1) {
-                    throw new UnsupportedOperationException("Expression contains letters");
+                    throw new UnsupportedOperationException("Expression contains unsupported symbols");
                 }
                 while (!operationSymbols.isEmpty() && operationPriority(c) <= operationPriority(operationSymbols.peek())) {
                     if (operationSymbols.peek() == '(')
-                        return "Wrong input";
+                        throw new UnsupportedOperationException("Unbalanced brackets");
                     result.append(operationSymbols.pop());
                 }
                 LOGGER.info("Add operation symbol '{}' to result", c);
@@ -90,7 +92,7 @@ public final class FractionCalculator {
 
         while (!operationSymbols.isEmpty()) {
             if (operationSymbols.peek() == '(')
-                return "Wrong input";
+                throw new UnsupportedOperationException("Unbalanced brackets");
             result.append(operationSymbols.pop());
         }
 
