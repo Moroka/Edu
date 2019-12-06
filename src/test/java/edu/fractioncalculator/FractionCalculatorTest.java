@@ -26,9 +26,9 @@ public class FractionCalculatorTest {
         assertEquals(FractionCalculator.infixToPostfix("53"), "53 ");
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void infixToPostfixEmptyInputTest() {
-        assertEquals(FractionCalculator.infixToPostfix(""), "Wrong input(empty expression)");
+        assertEquals(FractionCalculator.infixToPostfix(""), "Expression length must be greater than zero)");
     }
 
     @Test
@@ -37,7 +37,7 @@ public class FractionCalculatorTest {
         assertEquals(FractionCalculator.infixToPostfix("5 *6 /3 -2"), "5 6 *3 /2 -");
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void infixToPostfixWrongCharTest() {
         assertEquals(FractionCalculator.infixToPostfix("5 -c"), "Wrong input(only digits supported)");
         assertEquals(FractionCalculator.infixToPostfix("5 % 2"), "Wrong input(only digits supported)");
@@ -76,13 +76,6 @@ public class FractionCalculatorTest {
         assertEquals(FractionCalculator.calculateExpression("53-3"), "50");
         assertEquals(FractionCalculator.calculateExpression("3*3"), "9");
         assertEquals(FractionCalculator.calculateExpression("3/3"), "1");
-    }
-
-    @Test
-    public void calculateExpressionWhiteSpaceTest() {
-        assertEquals(FractionCalculator.calculateExpression("5 +3 "), "53+");
-        assertEquals(FractionCalculator.calculateExpression("        5   +      3 "), "53+");
-        assertEquals(FractionCalculator.calculateExpression("  5 + 3 "), "53+");
     }
 
     @Test

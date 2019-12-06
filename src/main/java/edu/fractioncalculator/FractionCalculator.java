@@ -47,7 +47,7 @@ public final class FractionCalculator {
 
         final int expressionLength = expression.length();
         if (expressionLength == 0)
-            return "Wrong input(empty expression)";
+            throw new UnsupportedOperationException("Expression length must be greater than zero");
 
         final StringBuilder result = new StringBuilder();
         final Stack<Character> operationSymbols = new Stack<>();
@@ -56,8 +56,7 @@ public final class FractionCalculator {
             final char c = expression.charAt(i);
             LOGGER.info("> Parse char {} at expression", c);
             if (Character.isLetter(c)) {
-                LOGGER.info("Infix expression contains letters: {}", expression);
-                return "Wrong input(only digits supported)";
+                throw new UnsupportedOperationException("Expression contains letters");
             }
             if (Character.isDigit(c)) {
                 final String multipleCharsValue = getMultipleCharsValue(expression.substring(i));
