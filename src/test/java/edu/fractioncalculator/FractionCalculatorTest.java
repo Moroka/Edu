@@ -63,10 +63,10 @@ public class FractionCalculatorTest {
         assertEquals(FractionCalculator.infixToPostfix("(1 + 5)"), "1 5 +");
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void infixToPostfixUnbalancedBracketsTest() {
         //TODO EmptyStackException
-//        assertEquals(FractionCalculator.infixToPostfix("(1 + 2))"), "153*+8-19*+");
+        assertEquals(FractionCalculator.infixToPostfix("(1 + 2))"), "153*+8-19*+");
     }
 
     // Calculator expression tests

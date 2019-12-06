@@ -69,13 +69,14 @@ public final class FractionCalculator {
             } else if (c == ')') {
                 while (!operationSymbols.isEmpty() && operationSymbols.peek() != '(')
                     result.append(operationSymbols.pop());
-                if (!operationSymbols.isEmpty() && operationSymbols.peek() != '(')
-                    return "Wrong input";
-                else
-                    operationSymbols.pop();
+                    if (!operationSymbols.isEmpty())
+                        operationSymbols.pop();
+                    else
+                        throw new UnsupportedOperationException("Unbalanced brackets");
+
             } else {
                 if (operationPriority(c) == -1) {
-                    return "Wrong input(only digits supported)";
+                    throw new UnsupportedOperationException("Expression contains letters");
                 }
                 while (!operationSymbols.isEmpty() && operationPriority(c) <= operationPriority(operationSymbols.peek())) {
                     if (operationSymbols.peek() == '(')
